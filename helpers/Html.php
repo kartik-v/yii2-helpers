@@ -48,14 +48,6 @@ class Html extends \yii\helpers\Html {
     const TYPE_DANGER = 'danger';
 
     /**
-     * Check if a variable is empty or not set
-     * @param reference $var variable to perform the check
-     */
-    public static function isEmpty(&$var) {
-        return (!isset($var) || (strlen($var) == 0));
-    }
-
-    /**
      * Generates an icon.
      * @param string $icon the bootstrap icon name without prefix (e.g. 'plus', 'pencil', 'trash')
      * @param array $options html options for the icon container
@@ -96,7 +88,7 @@ class Html extends \yii\helpers\Html {
      * @see http://getbootstrap.com/components/#labels
      */
     public static function bsLabel($content, $type = '', $options = [], $prefix = 'label label-', $tag = 'span') {
-        if (static::isEmpty($type)) {
+        if (Enum::isEmpty($type)) {
             $type = static::TYPE_DEFAULT;
         }
         $class = isset($options['class']) ? ' ' . $options['class'] : '';
@@ -203,10 +195,10 @@ class Html extends \yii\helpers\Html {
         if (is_array($content)) {
             $heading = isset($content['heading']) ? $content['heading'] : '';
             $body = isset($content['body']) ? $content['body'] : '';
-            if (!static::isEmpty($heading)) {
+            if (!Enum::isEmpty($heading)) {
                 $heading = static::tag('h4', $heading, ['class' => 'list-group-item-heading']);
             }
-            if (!static::isEmpty($body)) {
+            if (!Enum::isEmpty($body)) {
                 $body = static::tag('p', $body, ['class' => 'list-group-item-text']);
             }
             $content = $heading . "\n" . $body;
@@ -214,13 +206,13 @@ class Html extends \yii\helpers\Html {
 
         /* Parse item badge component */
         $badge = isset($item['badge']) ? $item['badge'] : '';
-        if (!static::isEmpty($badge)) {
+        if (!Enum::isEmpty($badge)) {
             $content = static::badge($badge) . $content;
         }
 
         /* Parse item url */
         $url = isset($item['url']) ? $item['url'] : '';
-        if (!static::isEmpty($url)) {
+        if (!Enum::isEmpty($url)) {
             /* Parse if item is active */
             if (isset($item['active']) && $item['active']) {
                 static::addCssClass($item['options'], 'active');
@@ -385,13 +377,13 @@ class Html extends \yii\helpers\Html {
         }
         else {
             static::addCssClass($options, 'panel panel-' . $type);
-            $panel = (!static::isEmpty($content['preHeading'])) ? $content['preHeading'] . "\n" : '';
+            $panel = (!Enum::isEmpty($content['preHeading'])) ? $content['preHeading'] . "\n" : '';
             $panel .= static::generatePanelTitle($content, 'heading');
-            $panel .= (!static::isEmpty($content['preBody'])) ? $content['preBody'] . "\n" : '';
-            $panel .= (!static::isEmpty($content['body'])) ? static::tag('div', $content['body'], ['class' => 'panel-body']) . "\n" : '';
-            $panel .= (!static::isEmpty($content['postBody'])) ? $content['postBody'] . "\n" : '';
+            $panel .= (!Enum::isEmpty($content['preBody'])) ? $content['preBody'] . "\n" : '';
+            $panel .= (!Enum::isEmpty($content['body'])) ? static::tag('div', $content['body'], ['class' => 'panel-body']) . "\n" : '';
+            $panel .= (!Enum::isEmpty($content['postBody'])) ? $content['postBody'] . "\n" : '';
             $panel .= static::generatePanelTitle($content, 'footer');
-            $panel .= (!static::isEmpty($content['postFooter'])) ? $content['postFooter'] . "\n" : '';
+            $panel .= (!Enum::isEmpty($content['postFooter'])) ? $content['postFooter'] . "\n" : '';
             return static::tag('div', $panel, $options);
         }
     }
@@ -402,7 +394,7 @@ class Html extends \yii\helpers\Html {
      * @param string $type whether 'heading' or 'footer'
      */
     protected function generatePanelTitle($content, $type) {
-        if (!static::isEmpty($content[$type])) {
+        if (!Enum::isEmpty($content[$type])) {
             $title = $content[$type];
             if (isset($content["{$type}Title"]) && $content["{$type}Title"]) {
                 $title = static::tag("h3", $title, ["class" => "panel-title"]);
@@ -432,7 +424,7 @@ class Html extends \yii\helpers\Html {
      */
     public static function pageHeader($title, $subTitle = '', $options = []) {
         static::addCssClass($options, 'page-header');
-        if (!static::isEmpty($subTitle)) {
+        if (!Enum::isEmpty($subTitle)) {
             $title = "<h1>{$title} <small>{$subTitle}</small></h1>";
         }
         else {
@@ -463,7 +455,7 @@ class Html extends \yii\helpers\Html {
      */
     public static function well($content, $size = '', $options = []) {
         static::addCssClass($options, 'well');
-        if (!static::isEmpty($size)) {
+        if (!Enum::isEmpty($size)) {
             static::addCssClass($options, 'well-' . $size);
         }
         return static::tag('div', $content, $options);
@@ -504,8 +496,8 @@ class Html extends \yii\helpers\Html {
         static::addCssClass($imgOptions, 'media-object');
 
         $source = static::a(static::img($img, $imgOptions), $src, $srcOptions);
-        $heading = (!static::isEmpty($heading)) ? static::tag('h4', $heading, ['class' => 'media-heading']) : '';
-        $content = (!static::isEmpty($body)) ? static::tag('div', $heading . "\n" . $body, ['class' => 'media-body']) : $heading;
+        $heading = (!Enum::isEmpty($heading)) ? static::tag('h4', $heading, ['class' => 'media-heading']) : '';
+        $content = (!Enum::isEmpty($body)) ? static::tag('div', $heading . "\n" . $body, ['class' => 'media-body']) : $heading;
 
         return static::tag($tag, $source . "\n" . $content, $options);
     }
@@ -704,7 +696,7 @@ class Html extends \yii\helpers\Html {
      */
     public static function blockquote($content, $citeContent = '', $citeTitle = '', $citeSource = '', $options = []) {
         $content = static::tag('p', $content);
-        if (!static::isEmpty($citeContent)) {
+        if (!Enum::isEmpty($citeContent)) {
             $source = static::tag('cite', $citeSource, ['title' => $citeTitle]);
             $content .= "\n<small>" . str_replace('{source}', $source, $citeContent) . "</small>";
         }

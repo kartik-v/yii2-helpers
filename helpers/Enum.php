@@ -230,7 +230,7 @@ class Enum extends \yii\helpers\Inflector {
 
         // continue recursing?
         if ($r > 0) {
-            return convertTri($r, $tri + 1) . $str;
+            return static::convertTri($r, $tri + 1) . $str;
         }
         else {
             return $str;

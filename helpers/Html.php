@@ -236,8 +236,8 @@ class Html extends \yii\helpers\Html {
      *              - @param string $label the button label
      *              - @param string $icon the icon to place before the label
      *              - @param string $url the button url
-     *              - @param string $type the button type - one of the color modifier constants - defaults to static::TYPE_DEFAULT
-     *              - @param string $size the button type - one of the size modifier constants
+     *              - @param string $type one of the color modifier constants - defaults to static::TYPE_DEFAULT
+     *              - @param string $size one of the size modifier constants
      *              - @param array $options the button html options
      * @param boolean $fullWidth whether this is a full width jumbotron without any corners - defaults to false
      * @param array $options html options for the jumbotron

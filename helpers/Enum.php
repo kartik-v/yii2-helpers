@@ -82,17 +82,39 @@ class Enum extends \yii\helpers\Inflector {
         return $string . '\'' . ($string[strlen($string) - 1] != 's' ? 's' : '');
     }
 
+	
+	public static function timeElapsed2($fromTime = null, $toTime = null) {
+		$time = time() - $time; // to get the time since that moment
+
+		$tokens = array(
+			31536000 => 'year',
+			2592000 => 'month',
+			604800 => 'week',
+			86400 => 'day',
+			3600 => 'hour',
+			60 => 'minute',
+			1 => 'second'
+		);
+
+	
+	}
+
     /**
      * Get time elapsed (Facebook Style)
+	 *
+ 	 * Example Output(s): 
+	 * 		 10 hours ago
+	 *
      * @param string $fromTime start date time 
+     * @param boolean $human if true returns an approximate human friendly output 
+	 * If set to false will attempt an exact conversion of time intervals.
      * @param string $toTime end date time (defaults to current system time)
+     * @param string $append the string to append for the converted elapsed time
      * @return string
      */
-    public static function timeElapsed($fromTime = null, $toTime = null) {
-        if ($fromTime == null) {
-            $elapsed = null;
-        }
-        else {
+    public static function timeElapsed($fromTime = null, $human = true, $toTime = null, $append = ' ago') {
+		$elapsed = '';
+        if ($fromTime != null) {
             $fromTime = strtotime($fromTime);
             $toTime = ($toTime == null) ? time() : (int) $toTime;
             $diff = $toTime - $fromTime;
@@ -104,44 +126,72 @@ class Enum extends \yii\helpers\Inflector {
                 'week' => 604800,
                 'day' => 86400,
                 'hour' => 3600,
-                'minute' => 60
+                'minute' => 60,
+				'second' => 1
             ];
 
-            // now we just find the difference
-            if ($diff <= 0) {
-                $elapsed = 'a moment ago';
-            }
-            elseif ($diff < 60) {
-                $elapsed = $diff == 1 ? $diff . ' second ago' : $diff . ' seconds ago';
-            }
-            elseif ($diff >= 60 && $diff < $intervals['hour']) {
-                $diff = floor($diff / $intervals['minute']);
-                $elapsed = $diff == 1 ? $diff . ' minute ago' : $diff . ' minutes ago';
-            }
-            elseif ($diff >= $intervals['hour'] && $diff < $intervals['day']) {
-                $diff = floor($diff / $intervals['hour']);
-                $elapsed = $diff == 1 ? $diff . ' hour ago' : $diff . ' hours ago';
-            }
-            elseif ($diff >= $intervals['day'] && $diff < $intervals['week']) {
-                $diff = floor($diff / $intervals['day']);
-                $elapsed = $diff == 1 ? $diff . ' day ago' : $diff . ' days ago';
-            }
-            elseif ($diff >= $intervals['week'] && $diff < $intervals['month']) {
-                $diff = floor($diff / $intervals['week']);
-                $elapsed = $diff == 1 ? $diff . ' week ago' : $diff . ' weeks ago';
-            }
-            elseif ($diff >= $intervals['month'] && $diff < $intervals['year']) {
-                $diff = floor($diff / $intervals['month']);
-                $elapsed = $diff == 1 ? $diff . ' month ago' : $diff . ' months ago';
-            }
-            elseif ($diff >= $intervals['year']) {
-                $diff = floor($diff / $intervals['year']);
-                $elapsed = $diff == 1 ? $diff . ' year ago' : $diff . ' years ago';
-            }
+			if ($human) {
+				// now we just find the difference
+				if ($diff <= 0) {
+					$elapsed = 'a moment ago';
+				}
+				elseif ($diff < 60) {
+					$elapsed = $diff == 1 ? $diff . ' second ago' : $diff . ' seconds' . $append;
+				}
+				elseif ($diff >= 60 && $diff < $intervals['hour']) {
+					$diff = floor($diff / $intervals['minute']);
+					$elapsed = $diff == 1 ? $diff . ' minute ago' : $diff . ' minutes' . $append;
+				}
+				elseif ($diff >= $intervals['hour'] && $diff < $intervals['day']) {
+					$diff = floor($diff / $intervals['hour']);
+					$elapsed = $diff == 1 ? $diff . ' hour ago' : $diff . ' hours' . $append;
+				}
+				elseif ($diff >= $intervals['day'] && $diff < $intervals['week']) {
+					$diff = floor($diff / $intervals['day']);
+					$elapsed = $diff == 1 ? $diff . ' day ago' : $diff . ' days' . $append;
+				}
+				elseif ($diff >= $intervals['week'] && $diff < $intervals['month']) {
+					$diff = floor($diff / $intervals['week']);
+					$elapsed = $diff == 1 ? $diff . ' week ago' : $diff . ' weeks ago';
+				}
+				elseif ($diff >= $intervals['month'] && $diff < $intervals['year']) {
+					$diff = floor($diff / $intervals['month']);
+					$elapsed = $diff == 1 ? $diff . ' month ago' : $diff . ' months' . $append;
+				}
+				elseif ($diff >= $intervals['year']) {
+					$diff = floor($diff / $intervals['year']);
+					$elapsed = $diff == 1 ? $diff . ' year ago' : $diff . ' years' . $append;
+				}
+			}
+			else {
+				$elapsed = static::time2String($diff, $intervals) . $append;
+			}
         }
         return $elapsed;
     }
-
+	
+    /**
+     * Get elapsed time converted to string 
+	 *
+	 * Example Output: 
+	 * 		 1 year 5 months 3 days ago
+	 *
+     * @param integer $timeline elapsed number of seconds
+     * @param array $intervals configuration of time intervals in seconds
+     * @return string
+     */
+    protected static function time2String($timeline, $intervals) {
+		$output = '';
+        foreach ($intervals AS $name => $seconds) {
+            $num = floor($timeline / $seconds);
+            $timeline -= ($num * $seconds);
+			if ($num > 0) {
+				$output .= $num . ' ' . $name . (($num > 1) ? 's' : '') . ' ';
+			}
+        }
+        return trim($output);
+    }
+	
     /**
      * Format and convert a Bytes to its 
      * optimal higher metric unit

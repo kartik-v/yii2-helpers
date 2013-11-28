@@ -248,7 +248,7 @@ class Enum extends \yii\helpers\Inflector {
         $num = (int) $num; // make sure it's an integer
 
         if ($num < 0) {
-            return "negative " . convertTri(-$num, 0);
+            return "negative " . static::convertTri(-$num, 0);
         }
 
         if ($num == 0) {

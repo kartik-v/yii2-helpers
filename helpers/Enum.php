@@ -82,23 +82,6 @@ class Enum extends \yii\helpers\Inflector {
         return $string . '\'' . ($string[strlen($string) - 1] != 's' ? 's' : '');
     }
 
-	
-	public static function timeElapsed2($fromTime = null, $toTime = null) {
-		$time = time() - $time; // to get the time since that moment
-
-		$tokens = array(
-			31536000 => 'year',
-			2592000 => 'month',
-			604800 => 'week',
-			86400 => 'day',
-			3600 => 'hour',
-			60 => 'minute',
-			1 => 'second'
-		);
-
-	
-	}
-
     /**
      * Get time elapsed (Facebook Style)
      * 

@@ -227,7 +227,7 @@ class Html extends \yii\helpers\Html {
     /**
      * Generates a jumbotron - a lightweight, flexible component that can optionally 
      * extend the entire viewport to showcase key content on your site.
-     * @param mixed $content the list item content 
+     * @param mixed $content the jumbotron content 
      *      - when passed as a string, it will display this directly as a raw content
      *      - when passed as an array, it requires these keys
      *          - @param string $heading the jumbotron content title

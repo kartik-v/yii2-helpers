@@ -174,7 +174,7 @@ class Enum extends \yii\helpers\Inflector {
     }
 
     /**
-     * Format and convert a Bytes to its 
+     * Format and convert "bytes" to its 
      * optimal higher metric unit
      * @param double $bytes number of bytes
      * @param integer $precision the number of decimal places to round off

@@ -33,7 +33,6 @@ class Enum extends \yii\helpers\Inflector {
         " eighteen",
         " nineteen"
     ];
-    
     public static $tens = array(
         "",
         "",
@@ -46,7 +45,6 @@ class Enum extends \yii\helpers\Inflector {
         " eighty",
         " ninety"
     );
-    
     public static $triplets = array(
         "",
         " thousand",
@@ -96,7 +94,7 @@ class Enum extends \yii\helpers\Inflector {
      * @return string
      */
     public static function timeElapsed($fromTime = null, $human = true, $toTime = null, $append = ' ago') {
-		$elapsed = '';
+        $elapsed = '';
         if ($fromTime != null) {
             $fromTime = strtotime($fromTime);
             $toTime = ($toTime == null) ? time() : (int) $toTime;
@@ -110,49 +108,49 @@ class Enum extends \yii\helpers\Inflector {
                 'day' => 86400,
                 'hour' => 3600,
                 'minute' => 60,
-				'second' => 1
+                'second' => 1
             ];
 
-			if ($human) {
-				// now we just find the difference
-				if ($diff <= 0) {
-					$elapsed = 'a moment ago';
-				}
-				elseif ($diff < 60) {
-					$elapsed = $diff == 1 ? $diff . ' second ago' : $diff . ' seconds' . $append;
-				}
-				elseif ($diff >= 60 && $diff < $intervals['hour']) {
-					$diff = floor($diff / $intervals['minute']);
-					$elapsed = $diff == 1 ? $diff . ' minute ago' : $diff . ' minutes' . $append;
-				}
-				elseif ($diff >= $intervals['hour'] && $diff < $intervals['day']) {
-					$diff = floor($diff / $intervals['hour']);
-					$elapsed = $diff == 1 ? $diff . ' hour ago' : $diff . ' hours' . $append;
-				}
-				elseif ($diff >= $intervals['day'] && $diff < $intervals['week']) {
-					$diff = floor($diff / $intervals['day']);
-					$elapsed = $diff == 1 ? $diff . ' day ago' : $diff . ' days' . $append;
-				}
-				elseif ($diff >= $intervals['week'] && $diff < $intervals['month']) {
-					$diff = floor($diff / $intervals['week']);
-					$elapsed = $diff == 1 ? $diff . ' week ago' : $diff . ' weeks ago';
-				}
-				elseif ($diff >= $intervals['month'] && $diff < $intervals['year']) {
-					$diff = floor($diff / $intervals['month']);
-					$elapsed = $diff == 1 ? $diff . ' month ago' : $diff . ' months' . $append;
-				}
-				elseif ($diff >= $intervals['year']) {
-					$diff = floor($diff / $intervals['year']);
-					$elapsed = $diff == 1 ? $diff . ' year ago' : $diff . ' years' . $append;
-				}
-			}
-			else {
-				$elapsed = static::time2String($diff, $intervals) . $append;
-			}
+            if ($human) {
+                // now we just find the difference
+                if ($diff <= 0) {
+                    $elapsed = 'a moment ago';
+                }
+                elseif ($diff < 60) {
+                    $elapsed = $diff == 1 ? $diff . ' second ago' : $diff . ' seconds' . $append;
+                }
+                elseif ($diff >= 60 && $diff < $intervals['hour']) {
+                    $diff = floor($diff / $intervals['minute']);
+                    $elapsed = $diff == 1 ? $diff . ' minute ago' : $diff . ' minutes' . $append;
+                }
+                elseif ($diff >= $intervals['hour'] && $diff < $intervals['day']) {
+                    $diff = floor($diff / $intervals['hour']);
+                    $elapsed = $diff == 1 ? $diff . ' hour ago' : $diff . ' hours' . $append;
+                }
+                elseif ($diff >= $intervals['day'] && $diff < $intervals['week']) {
+                    $diff = floor($diff / $intervals['day']);
+                    $elapsed = $diff == 1 ? $diff . ' day ago' : $diff . ' days' . $append;
+                }
+                elseif ($diff >= $intervals['week'] && $diff < $intervals['month']) {
+                    $diff = floor($diff / $intervals['week']);
+                    $elapsed = $diff == 1 ? $diff . ' week ago' : $diff . ' weeks ago';
+                }
+                elseif ($diff >= $intervals['month'] && $diff < $intervals['year']) {
+                    $diff = floor($diff / $intervals['month']);
+                    $elapsed = $diff == 1 ? $diff . ' month ago' : $diff . ' months' . $append;
+                }
+                elseif ($diff >= $intervals['year']) {
+                    $diff = floor($diff / $intervals['year']);
+                    $elapsed = $diff == 1 ? $diff . ' year ago' : $diff . ' years' . $append;
+                }
+            }
+            else {
+                $elapsed = static::time2String($diff, $intervals) . $append;
+            }
         }
         return $elapsed;
     }
-	
+
     /**
      * Get elapsed time converted to string
      * 
@@ -164,17 +162,17 @@ class Enum extends \yii\helpers\Inflector {
      * @return string
      */
     protected static function time2String($timeline, $intervals) {
-		$output = '';
+        $output = '';
         foreach ($intervals AS $name => $seconds) {
             $num = floor($timeline / $seconds);
             $timeline -= ($num * $seconds);
-			if ($num > 0) {
-				$output .= $num . ' ' . $name . (($num > 1) ? 's' : '') . ' ';
-			}
+            if ($num > 0) {
+                $output .= $num . ' ' . $name . (($num > 1) ? 's' : '') . ' ';
+            }
         }
         return trim($output);
     }
-	
+
     /**
      * Format and convert a Bytes to its 
      * optimal higher metric unit
@@ -215,7 +213,7 @@ class Enum extends \yii\helpers\Inflector {
         if ($x > 0) {
             $str = static::$ones[$x] . " hundred";
         }
-        
+
         // do ones and tens
         if ($y < 20) {
             $str .= static::$ones[$y];
@@ -223,13 +221,13 @@ class Enum extends \yii\helpers\Inflector {
         else {
             $str .= static::$tens[(int) ($y / 10)] . static::$ones[$y % 10];
         }
-        
+
         // add triplet modifier only if there
         // is some output to be modified...
         if ($str != "") {
             $str .= static::$triplets[$tri];
         }
-        
+
         // continue recursing?
         if ($r > 0) {
             return convertTri($r, $tri + 1) . $str;

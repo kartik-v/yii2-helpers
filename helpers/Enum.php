@@ -101,13 +101,13 @@ class Enum extends \yii\helpers\Inflector {
 
     /**
      * Get time elapsed (Facebook Style)
-	 *
- 	 * Example Output(s): 
-	 * 		 10 hours ago
-	 *
+     * 
+     * Example Output(s):
+     * 	10 hours ago
+     * 
      * @param string $fromTime start date time 
-     * @param boolean $human if true returns an approximate human friendly output 
-	 * If set to false will attempt an exact conversion of time intervals.
+     * @param boolean $human if true returns an approximate human friendly output
+     * If set to false will attempt an exact conversion of time intervals.
      * @param string $toTime end date time (defaults to current system time)
      * @param string $append the string to append for the converted elapsed time
      * @return string
@@ -171,11 +171,11 @@ class Enum extends \yii\helpers\Inflector {
     }
 	
     /**
-     * Get elapsed time converted to string 
-	 *
-	 * Example Output: 
-	 * 		 1 year 5 months 3 days ago
-	 *
+     * Get elapsed time converted to string
+     * 
+     * Example Output:
+     * 	1 year 5 months 3 days ago
+     * 
      * @param integer $timeline elapsed number of seconds
      * @param array $intervals configuration of time intervals in seconds
      * @return string

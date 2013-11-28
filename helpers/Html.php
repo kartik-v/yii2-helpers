@@ -32,10 +32,10 @@ class Html extends \yii\helpers\Html {
     /**
      * Bootstrap size modifier suffixes
      */
-    const TINY = 'xs';
-    const SMALL = 'sm';
-    const MEDIUM = 'md';
-    const LARGE = 'lg';
+    const SIZE_TINY = 'xs';
+    const SIZE_SMALL = 'sm';
+    const SIZE_MEDIUM = 'md';
+    const SIZE_LARGE = 'lg';
 
     /**
      * Bootstrap color modifier classes
@@ -437,10 +437,10 @@ class Html extends \yii\helpers\Html {
      * Generates a well container.
      * @param string $content the content
      * @param string $size the well size - one of the size constants
-     *  - TINY   = 'xs';
-     *  - SMALL  = 'sm';
-     *  - MEDIUM = 'md';
-     *  - LARGE  = 'lg';
+     *  - SIZE_TINY   = 'xs';
+     *  - SIZE_SMALL  = 'sm';
+     *  - SIZE_MEDIUM = 'md';
+     *  - SIZE_LARGE  = 'lg';
      * @param array $options html options for the well container.
      *
      * Example(s): 
@@ -733,7 +733,7 @@ class Html extends \yii\helpers\Html {
      *      Html::icon('phone'),
      *      Html::icon('envelope')
      * );
-     * echo Html::well($address, Html::TINY);
+     * echo Html::well($address, Html::SIZE_TINY);
      * ```
      *
      * @see http://getbootstrap.com/css/#type-addresses

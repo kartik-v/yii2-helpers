@@ -13,6 +13,7 @@ use yii\base\InvalidConfigException;
  */
 class Enum extends \yii\helpers\Inflector {
 
+    /* list of ones */
     public static $ones = [
         "",
         " one",
@@ -35,6 +36,8 @@ class Enum extends \yii\helpers\Inflector {
         " eighteen",
         " nineteen"
     ];
+
+    /* list of tens */
     public static $tens = array(
         "",
         "",
@@ -47,6 +50,8 @@ class Enum extends \yii\helpers\Inflector {
         " eighty",
         " ninety"
     );
+
+    /* list of triplets */
     public static $triplets = array(
         "",
         " thousand",
@@ -61,7 +66,44 @@ class Enum extends \yii\helpers\Inflector {
         " nonillion"
     );
 
-    /**
+   /* list of months */
+   public static $months = [
+        1 => 'January', 
+        'February', 
+        'March', 
+        'April',
+        'May', 
+        'June', 
+        'July', 
+        'August', 
+        'September',
+        'October', 
+        'November', 
+        'December'
+    ];
+
+    /* list of days of week */
+    public static $days = [
+        'Sunday', 
+        'Monday', 
+        'Tuesday', 
+        'Wednesday', 
+        'Thursday', 
+        'Friday', 
+        'Saturday'
+    ];
+   
+    /* time intervals in seconds */
+    public static $intervals = [
+        'year' => 31556926,
+        'month' => 2629744,
+        'week' => 604800,
+        'day' => 86400,
+        'hour' => 3600,
+        'minute' => 60,
+        'second' => 1
+    ];
+/**
      * Check if a variable is empty or not set.
      * @param reference $var variable to perform the check
      * @return boolean
@@ -101,18 +143,8 @@ class Enum extends \yii\helpers\Inflector {
             $fromTime = strtotime($fromTime);
             $toTime = ($toTime == null) ? time() : (int) $toTime;
             $diff = $toTime - $fromTime;
-
-            // intervals in seconds
-            $intervals = [
-                'year' => 31556926,
-                'month' => 2629744,
-                'week' => 604800,
-                'day' => 86400,
-                'hour' => 3600,
-                'minute' => 60,
-                'second' => 1
-            ];
-
+            $intervals = static::$intervals;
+            
             if ($human) {
                 // now we just find the difference
                 if ($diff <= 0) {
@@ -293,17 +325,6 @@ class Enum extends \yii\helpers\Inflector {
      * @throws InvalidConfigException if $unit passed is invalid
      */
     public static function dateList($unit, $abbr = false, $maxday = 31) {
-        $months = [
-            'January', 'February', 'March', 'April',
-            'May', 'June', 'July', 'August', 'September',
-            'October', 'November', 'December'
-        ];
-
-        $days = [
-            'Sunday', 'Monday', 'Tuesday', 'Wednesday',
-            'Thursday', 'Friday', 'Saturday'
-        ];
-
         if ($unit == 'date' && $maxday >= 1) {
             return range(1, $maxday);
         }
@@ -313,10 +334,10 @@ class Enum extends \yii\helpers\Inflector {
             };
         }
         if ($unit == 'month') {
-            return $abbr ? array_map($substr, $months) : $months;
+            return $abbr ? array_map($substr, static::$months) : static::$months;
         }
         elseif ($unit == 'day') {
-            return $abbr ? array_map($substr, $days) : $days;
+            return $abbr ? array_map($substr, static::$days) : static::$days;
         }
         else {
             throw new InvalidConfigException("Invalid date unit passed. Must be 'date', 'day', or 'month'.");

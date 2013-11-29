@@ -2,6 +2,8 @@
 
 namespace kartik\helpers;
 
+use yii\base\InvalidConfigException;
+
 /**
  * Collection of useful helpers for Yii Applications
  *
@@ -256,6 +258,139 @@ class Enum extends \yii\helpers\Inflector {
         }
 
         return static::convertTri($num, 0);
+    }
+
+    /**
+     * Generates a list of years
+     * 
+     * @param integer $from the start year
+     * @param integer $to the end year
+     * @param boolean $keys whether to set the array keys same as the values (defaults to false)
+     * @param boolean $desc whether to sort the years descending (defaults to true)
+     * @return array
+     * @throws InvalidConfigException if $to < $from
+     */
+    public static function yearList($from, $to = null, $keys = false, $desc = true) {
+        if (static::isEmpty($to)) {
+            $to = intval(date("Y"));
+        }
+        if ($to >= $from) {
+            $years = ($desc) ? range($to, $from) : range($from, $to);
+            return $keys ? array_combine($years, $years) : $years;
+        }
+        else {
+            throw new InvalidConfigException("The 'year to' parameter must exceed 'year from'.");
+        }
+    }
+
+    /**
+     * Generate a date picker array list for Gregorian Calendar
+     * 
+     * @param string $unit the date unit ('date', 'day', 'month')
+     * @param boolean $abbr whether to return abbreviated day or month
+     * @param integer $maxday the maximum date if $unit = 'date'
+     * @return array
+     * @throws InvalidConfigException if $unit passed is invalid
+     */
+    public static function dateList($unit, $abbr = false, $maxday = 31) {
+        $months = [
+            'January', 'February', 'March', 'April',
+            'May', 'June', 'July', 'August', 'September',
+            'October', 'November', 'December'
+        ];
+
+        $days = [
+            'Sunday', 'Monday', 'Tuesday', 'Wednesday',
+            'Thursday', 'Friday', 'Saturday'
+        ];
+
+        if ($unit == 'date' && $maxday >= 1) {
+            return range(1, $maxday);
+        }
+        else {
+            $substr = function($element) {
+                return substr($element, 0, 3);
+            };
+        }
+        if ($unit == 'month') {
+            return $abbr ? array_map($substr, $months) : $months;
+        }
+        elseif ($unit == 'day') {
+            return $abbr ? array_map($substr, $days) : $days;
+        }
+        else {
+            throw new InvalidConfigException("Invalid date unit passed. Must be 'date', 'day', or 'month'.");
+        }
+    }
+
+    /**
+     * Generate a time picker array list
+     * 
+     * @param string $unit the time unit ('hour', 'min', 'sec', 'ms')
+     * @return array
+     * @throws InvalidConfigException if $unit passed is invalid
+     */
+    public static function timeList($unit) {
+        $pre = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'];
+        if ($unit == 'hour') {
+            return array_merge($pre, range(10, 23));
+        }
+        elseif ($unit == 'min' || $unit == 'sec') {
+            return array_merge($pre, range(10, 59));
+        }
+        elseif ($unit == 'ms') {
+            return array_merge($pre, range(10, 1000));
+        }
+        else {
+            throw new InvalidConfigException("Invalid time unit passed. Must be 'hour', 'min', 'sec', or 'ms'.");
+        }
+    }
+
+    /**
+     * Generates a boolean list
+     * 
+     * @param string $true the label for the true value
+     * @param string $false the label for the false value
+     * @return array
+     */
+    public static function boolList($true = 'Yes', $false = 'No') {
+        return [
+            true => $true,
+            false => $false
+        ];
+    }
+
+    /**
+     * Gets the user's IP address
+     * @param boolean $filterLocal whether to filter local & LAN IP (defaults to true)
+     * @return string
+     */
+    public static function userIP($filterLocal = true) {
+        $ipSources = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR',
+            'HTTP_FORWARDED',
+            'REMOTE_ADDR'
+        ];
+        foreach ($ipSources as $key) {
+            if (array_key_exists($key, $_SERVER) === true) {
+                foreach (array_map('trim', explode(',', $_SERVER[$key])) as $ip) {
+                    if ($filterLocal) {
+                        $checkFilter = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+                        if ($checkFilter !== false) {
+                            return $ip;
+                        }
+                    }
+                    else {
+                        return $ip;
+                    }
+                }
+            }
+        }
+        return 'Unknown';
     }
 
 }

@@ -73,4 +73,4 @@ echo Enum::properize('Chris');
 
 ## License
 
-**yii2-widgets** is released under the BSD 3-Clause License. See the bundled `LICENSE.md` for details.
+**yii2-helpers** is released under the BSD 3-Clause License. See the bundled `LICENSE.md` for details.

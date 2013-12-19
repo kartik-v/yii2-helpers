@@ -393,7 +393,7 @@ class Html extends \yii\helpers\Html {
      * @param array $content the panel content components.
      * @param string $type whether 'heading' or 'footer'
      */
-    protected function generatePanelTitle($content, $type) {
+    protected static function generatePanelTitle($content, $type) {
         if (!Enum::isEmpty($content[$type])) {
             $title = $content[$type];
             if (isset($content["{$type}Title"]) && $content["{$type}Title"]) {

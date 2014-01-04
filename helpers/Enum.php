@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2013
+ * @package yii2-helpers
+ * @version 1.0.0
+ */
+
 namespace kartik\helpers;
 
 use yii\base\InvalidConfigException;
@@ -12,8 +18,8 @@ use yii\base\InvalidConfigException;
  *
  */
 class Enum extends \yii\helpers\Inflector {
-
     /* list of ones */
+
     public static $ones = [
         "",
         " one",

@@ -66,33 +66,33 @@ class Enum extends \yii\helpers\Inflector {
         " nonillion"
     );
 
-   /* list of months */
-   public static $months = [
-        1 => 'January', 
-        'February', 
-        'March', 
+    /* list of months */
+    public static $months = [
+        1 => 'January',
+        'February',
+        'March',
         'April',
-        'May', 
-        'June', 
-        'July', 
-        'August', 
+        'May',
+        'June',
+        'July',
+        'August',
         'September',
-        'October', 
-        'November', 
+        'October',
+        'November',
         'December'
     ];
 
     /* list of days of week */
     public static $days = [
-        'Sunday', 
-        'Monday', 
-        'Tuesday', 
-        'Wednesday', 
-        'Thursday', 
-        'Friday', 
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
         'Saturday'
     ];
-   
+
     /* time intervals in seconds */
     public static $intervals = [
         'year' => 31556926,
@@ -103,7 +103,8 @@ class Enum extends \yii\helpers\Inflector {
         'minute' => 60,
         'second' => 1
     ];
-/**
+
+    /**
      * Check if a variable is empty or not set.
      * @param reference $var variable to perform the check
      * @return boolean
@@ -144,7 +145,7 @@ class Enum extends \yii\helpers\Inflector {
             $toTime = ($toTime == null) ? time() : (int) $toTime;
             $diff = $toTime - $fromTime;
             $intervals = static::$intervals;
-            
+
             if ($human) {
                 // now we just find the difference
                 if ($diff <= 0) {

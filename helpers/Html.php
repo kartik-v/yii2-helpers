@@ -55,11 +55,11 @@ class Html extends \yii\helpers\Html {
      * @param string $tag the icon container tag (usually 'span' or 'i') - defaults to 'span'
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::icon('pencil');
      * echo Html::icon('trash', ['style' => 'color: red; font-size: 2em']);
      * echo Html::icon('plus', ['class' => 'text-success']);
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#glyphicons
      */
@@ -79,11 +79,11 @@ class Html extends \yii\helpers\Html {
      * @param string $tag the label container tag - defaults to 'span'
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::bsLabel('Default');
      * echo Html::bsLabel('Primary', Html::TYPE_PRIMARY);
      * echo Html::bsLabel('Success', Html::TYPE_SUCCESS);
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#labels
      */
@@ -103,9 +103,9 @@ class Html extends \yii\helpers\Html {
      * @param string $tag the badge container tag - defaults to 'span'
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::badge('1');
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#badges
      */
@@ -131,7 +131,7 @@ class Html extends \yii\helpers\Html {
      * @param string $itemTag the list item container tag - defaults to 'div'
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::listGroup([
      * 	[
      *      'content' => 'Cras justo odio',
@@ -169,7 +169,7 @@ class Html extends \yii\helpers\Html {
      *      'badge' => '1'
      * 	],
      * ]);
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#list-group
      */
@@ -243,7 +243,7 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the jumbotron
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::jumbotron(
      *      '<h1>Hello, world</h1><p>This is a simple jumbotron-style component for calling extra attention to featured content or information.</p>'
      * );
@@ -273,7 +273,7 @@ class Html extends \yii\helpers\Html {
      *          ]
      *      ]
      * ]);
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#jumbotron
      */
@@ -334,7 +334,7 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the panel container
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::panel(
      * 	['heading' => 'Panel Heading', 'body' => 'Panel Content'],
      * 	Html::TYPE_SUCCESS
@@ -366,7 +366,7 @@ class Html extends \yii\helpers\Html {
      *      'footerTitle' => true,
      *  ]
      * );
-     * ```
+     * ~~~
      *
      * @param array $options html options for the panel
      * @see http://getbootstrap.com/components/#panels
@@ -413,12 +413,12 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the page header
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::pageHeader(
      * 	'Example page header',
      * 	'Subtext for header'
      * );
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#page-header
      */
@@ -444,12 +444,12 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the well container.
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::well(
      * 	'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo.',
      * 	Html::LARGE
      * );
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#wells
      */
@@ -475,14 +475,14 @@ class Html extends \yii\helpers\Html {
      * @param string $tag the media container tag - defaults to 'div'
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::media(
      * 	'Media heading 1', 
      * 	'Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo.',
      * 	'#',
      * 	'http://placehold.it/64x64'
      * );
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#media
      */
@@ -516,7 +516,7 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the media list container
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::mediaList([
      * 	[
      *      'heading' => 'Media heading 1',
@@ -549,7 +549,7 @@ class Html extends \yii\helpers\Html {
      *      'img' => 'http://placehold.it/64x64'
      * 	],
      * ]);
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/components/#media
      */
@@ -600,10 +600,10 @@ class Html extends \yii\helpers\Html {
      * @param string $tag the html tag for rendering the close icon - defaults to 'button'
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::closeButton();
      * echo Html::closeButton(Html::icon('remove-sign');
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/css/#helper-classes-close
      */
@@ -622,11 +622,11 @@ class Html extends \yii\helpers\Html {
      * @param string $tag the html tag for rendering the caret - defaults to 'span'
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo 'Down Caret ' . Html::caret();
      * echo 'Up Caret ' . Html::caret('up');
      * echo 'Disabled Caret ' . Html::caret('down', true);
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/css/#helper-classes-carets
      */
@@ -634,7 +634,7 @@ class Html extends \yii\helpers\Html {
         static::addCssClass($options, 'caret');
 
         if (!isset($options['style'])) {
-            $options['style'] =  'margin-bottom: 3px;';
+            $options['style'] = 'margin-bottom: 3px;';
         }
 
         if ($disabled) {
@@ -657,10 +657,10 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the abbreviation
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::abbr('HTML', 'HyperText Markup Language')  . ' is the best thing since sliced bread';
      * echo Html::abbr('HTML', 'HyperText Markup Language', true);
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/css/#type-abbreviations
      */
@@ -682,14 +682,14 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the blockquote
      * 
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::blockquote(
      *      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
      *      'Someone famous in {source}',
      *      'International Premier League',
      *      'IPL'
      * );
-     * ```
+     * ~~~
      * 			
      * @param array $options html options for the blockquote
      * @see http://getbootstrap.com/css/#type-blockquotes
@@ -718,7 +718,7 @@ class Html extends \yii\helpers\Html {
      * @param string $emailLabel the prefix label for each email - defaults to '(E)'
      *
      * Example(s): 
-     * ```php
+     * ~~~
      * echo Html::address(
      *      'Twitter, Inc.',
      *      ['795 Folsom Ave, Suite 600', 'San Francisco, CA 94107'],
@@ -734,7 +734,7 @@ class Html extends \yii\helpers\Html {
      *      Html::icon('envelope')
      * );
      * echo Html::well($address, Html::SIZE_TINY);
-     * ```
+     * ~~~
      *
      * @see http://getbootstrap.com/css/#type-addresses
      */
@@ -767,4 +767,5 @@ class Html extends \yii\helpers\Html {
         }
         return static::tag('address', "<strong>{$name}</strong><br>\n" . $addresses . $phones . $emails, $options);
     }
+
 }

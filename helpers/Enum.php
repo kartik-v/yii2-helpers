@@ -122,8 +122,8 @@ class Enum extends \yii\helpers\Inflector {
     /**
      * Properize a string for possessive punctuation.
      * e.g. 
-     * 		properize("Chris"); //returns Chris'
-     * 		properize("David"); //returns David's
+     *  properize("Chris"); //returns Chris'
+     *  properize("David"); //returns David's
      * @param string $string input string
      */
     public static function properize($string) {
@@ -135,7 +135,7 @@ class Enum extends \yii\helpers\Inflector {
      * Get time elapsed (Facebook Style)
      * 
      * Example Output(s):
-     * 	10 hours ago
+     *  10 hours ago
      * 
      * @param string $fromTime start date time 
      * @param boolean $human if true returns an approximate human friendly output

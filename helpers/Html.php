@@ -775,25 +775,75 @@ class Html extends \yii\helpers\Html {
     }
 
     /**
-     * Adds inline CSS styles to the specified options.
-     * If the style is already in the options, it will not be added again.
-     * @param array $options the options to be modified.
-     * @param string $style the CSS style\s to be added
+     * Returns the CSS Styles as key value pairs
+     * for the specified options
+     * @param array $options the HTML options
+     * @return array
      */
-    public static function addCssStyle(&$options, $style) {
+    public static function getCssStyles($options) {
+        $styles = [];
         if (isset($options['style'])) {
-            $options['style'] = rtrim($options['style'], ';') . ';';
-            $style = rtrim($style, ';') . ';';
-            foreach (array_filter(explode(';', $style), 'strlen') as $s) {
-                $property = trim(substr($style, 0, strpos($s, ':')));
-                if (!preg_match('/[\s;]' . preg_quote($property) . '\s*:/i', ' ' . $options['style'])) {
-                    $options['style'] .= ' ' . trim($s) . ';';
+            $pairs = explode(';', $options['style']);
+            foreach ($pairs as $pair) {
+                $setting = explode(':', $pair);
+                if (count($setting) > 1) {
+                    $styles[trim($setting[0])] = trim($setting[1]);
                 }
             }
         }
-        else {
-            $options['style'] = $styles;
+        return $styles;
+    }
+
+    /**
+     * Parses the CSS Styles passed as an array 
+     * (as processed by [[getCssStyles]]) and 
+     * returns a CSS Style string
+     * @param array $styles the CSS styles array
+     * @return string
+     */
+    public static function parseCssStyle($styles = []) {
+        if (empty($styles)) {
+            return '';
         }
+        $style = '';
+        foreach ($styles as $key => $val) {
+            if ($style != '') {
+                $style = "; {$key}: {$val}";
+            }
+            else {
+                $style = "{$key}: {$val}";
+            }
+        }
+        return $style;
+    }
+
+    /**
+     * Adds inline CSS styles to the specified options.
+     * If the style is already in the options, it will not be added again.
+     * @param array $options the options to be modified.
+     * @param string $style the CSS style setting to be added
+     * @param string $value the CSS style value for the setting
+     */
+    public static function addCssStyle(&$options, $style, $value) {
+        $styles = static::getCssStyles($options);
+        if (empty($styles[$style])) {
+            $styles[trim($style)] = $value;
+            $options['style'] = static::parseCssStyle($styles);
+        }
+    }
+
+    /**
+     * Setup inline CSS styles to the specified options.
+     * If the style is already in the options, it will be overwritten 
+     * with new setting.
+     * @param array $options the options to be modified.
+     * @param string $style the CSS style setting to be added
+     * @param string $value the CSS style value for the setting
+     */
+    public static function setCssStyle(&$options, $style, $value) {
+        $styles = static::getCssStyles($options);
+        $styles[trim($style)] = $value;
+        $options['style'] = static::parseCssStyle($styles);
     }
 
     /**
@@ -802,18 +852,9 @@ class Html extends \yii\helpers\Html {
      * @param string $class the CSS class to be removed
      */
     public static function removeCssStyle(&$options, $style) {
-        if (isset($options['style'])) {
-            $styles = array_unique(preg_split('/[;]+/', $options['style'] . '; ' . $style, -1, PREG_SPLIT_NO_EMPTY));
-            if (($index = array_search($style, $styles)) !== false) {
-                unset($styles[$index]);
-            }
-            if (empty($styles)) {
-                unset($options['style']);
-            }
-            else {
-                $options['style'] = implode('; ', $styles);
-            }
-        }
+        $styles = static::getCssStyles($options);
+        unset($styles[trim($style)]);
+        $options['style'] = static::parseCssStyle($styles);
     }
 
 }

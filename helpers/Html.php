@@ -833,6 +833,17 @@ class Html extends \yii\helpers\Html {
     }
 
     /**
+     * Removes a CSS style from the specified options.
+     * @param array $options the options to be modified.
+     * @param string $style the CSS style setting to be removed
+     */
+    public static function removeCssStyle(&$options, $style) {
+        $styles = static::getCssStyles($options);
+        unset($styles[trim($style)]);
+        $options['style'] = static::parseCssStyle($styles);
+    }
+
+    /**
      * Setup inline CSS styles to the specified options.
      * If the style is already in the options, it will be overwritten 
      * with new setting.
@@ -843,17 +854,6 @@ class Html extends \yii\helpers\Html {
     public static function setCssStyle(&$options, $style, $value) {
         $styles = static::getCssStyles($options);
         $styles[trim($style)] = $value;
-        $options['style'] = static::parseCssStyle($styles);
-    }
-
-    /**
-     * Removes a CSS style from the specified options.
-     * @param array $options the options to be modified.
-     * @param string $class the CSS class to be removed
-     */
-    public static function removeCssStyle(&$options, $style) {
-        $styles = static::getCssStyles($options);
-        unset($styles[trim($style)]);
         $options['style'] = static::parseCssStyle($styles);
     }
 

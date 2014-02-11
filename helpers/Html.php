@@ -774,4 +774,46 @@ class Html extends \yii\helpers\Html {
         return static::tag('address', "<strong>{$name}</strong><br>\n" . $addresses . $phones . $emails, $options);
     }
 
+    /**
+     * Adds inline CSS styles to the specified options.
+     * If the style is already in the options, it will not be added again.
+     * @param array $options the options to be modified.
+     * @param string $style the CSS style\s to be added
+     */
+    public static function addCssStyle(&$options, $style) {
+        if (isset($options['style'])) {
+            $options['style'] = rtrim($options['style'], ';') . ';';
+            $style = rtrim($style, ';') . ';';
+            foreach (array_filter(explode(';', $style), 'strlen') as $s) {
+                $property = trim(substr($style, 0, strpos($s, ':')));
+                if (!preg_match('/[\s;]' . preg_quote($property) . '\s*:/i', ' ' . $options['style'])) {
+                    $options['style'] .= ' ' . trim($s) . ';';
+                }
+            }
+        }
+        else {
+            $options['style'] = $styles;
+        }
+    }
+
+    /**
+     * Removes a CSS style from the specified options.
+     * @param array $options the options to be modified.
+     * @param string $class the CSS class to be removed
+     */
+    public static function removeCssStyle(&$options, $style) {
+        if (isset($options['style'])) {
+            $styles = array_unique(preg_split('/[;]+/', $options['style'] . '; ' . $style, -1, PREG_SPLIT_NO_EMPTY));
+            if (($index = array_search($style, $styles)) !== false) {
+                unset($styles[$index]);
+            }
+            if (empty($styles)) {
+                unset($options['style']);
+            }
+            else {
+                $options['style'] = implode('; ', $styles);
+            }
+        }
+    }
+
 }

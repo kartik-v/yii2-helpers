@@ -615,9 +615,11 @@ class Html extends \yii\helpers\Html {
      */
     public static function closeButton($label = '&times;', $options = [], $tag = 'button') {
         static::addCssClass($options, 'close');
-        $options['type'] = 'button';
+        if ($tag == 'button') {
+            $options['type'] = 'button';
+        }
         $options['aria-hidden'] = 'true';
-        return static::tag('button', $label, $options);
+        return static::tag($tag, $label, $options);
     }
 
     /**

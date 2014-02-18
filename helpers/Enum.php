@@ -17,7 +17,8 @@ use yii\base\InvalidConfigException;
  * @since 1.0
  *
  */
-class Enum extends \yii\helpers\Inflector {
+class Enum extends \yii\helpers\Inflector
+{
     /* list of ones */
 
     public static $ones = [
@@ -115,7 +116,8 @@ class Enum extends \yii\helpers\Inflector {
      * @param reference $var variable to perform the check
      * @return boolean
      */
-    public static function isEmpty(&$var) {
+    public static function isEmpty(&$var)
+    {
         return is_array($var) ? empty($var) : (!isset($var) || (strlen($var) == 0));
     }
 
@@ -126,7 +128,8 @@ class Enum extends \yii\helpers\Inflector {
      *     properize("David"); //returns David's
      * @param string $string input string
      */
-    public static function properize($string) {
+    public static function properize($string)
+    {
         $string = preg_replace('/\s+(.*?)\s+/', '*\1*', $string);
         return $string . '\'' . ($string[strlen($string) - 1] != 's' ? 's' : '');
     }
@@ -144,7 +147,8 @@ class Enum extends \yii\helpers\Inflector {
      * @param string $append the string to append for the converted elapsed time
      * @return string
      */
-    public static function timeElapsed($fromTime = null, $human = true, $toTime = null, $append = ' ago') {
+    public static function timeElapsed($fromTime = null, $human = true, $toTime = null, $append = ' ago')
+    {
         $elapsed = '';
         if ($fromTime != null) {
             $fromTime = strtotime($fromTime);
@@ -202,7 +206,8 @@ class Enum extends \yii\helpers\Inflector {
      * @param array $intervals configuration of time intervals in seconds
      * @return string
      */
-    protected static function time2String($timeline, $intervals) {
+    protected static function time2String($timeline, $intervals)
+    {
         $output = '';
         foreach ($intervals AS $name => $seconds) {
             $num = floor($timeline / $seconds);
@@ -221,7 +226,8 @@ class Enum extends \yii\helpers\Inflector {
      * @param integer $precision the number of decimal places to round off
      * @return string
      */
-    public static function formatBytes($bytes, $precision = 2) {
+    public static function formatBytes($bytes, $precision = 2)
+    {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($bytes, 0);
@@ -241,7 +247,8 @@ class Enum extends \yii\helpers\Inflector {
      * @param double $tri the three digits converted per pass.
      * @return string
      */
-    protected static function convertTri($num, $tri) {
+    protected static function convertTri($num, $tri)
+    {
         // chunk the number, ...rxyy
         $r = (int) ($num / 1000);
         $x = ($num / 100) % 10;
@@ -285,7 +292,8 @@ class Enum extends \yii\helpers\Inflector {
      * @param double $num the source number
      * @return string
      */
-    public static function numToWords($num) {
+    public static function numToWords($num)
+    {
         $num = (int) $num; // make sure it's an integer
 
         if ($num < 0) {
@@ -309,7 +317,8 @@ class Enum extends \yii\helpers\Inflector {
      * @return array
      * @throws InvalidConfigException if $to < $from
      */
-    public static function yearList($from, $to = null, $keys = false, $desc = true) {
+    public static function yearList($from, $to = null, $keys = false, $desc = true)
+    {
         if (static::isEmpty($to)) {
             $to = intval(date("Y"));
         }
@@ -331,7 +340,8 @@ class Enum extends \yii\helpers\Inflector {
      * @return array
      * @throws InvalidConfigException if $unit passed is invalid
      */
-    public static function dateList($unit, $abbr = false, $maxday = 31) {
+    public static function dateList($unit, $abbr = false, $maxday = 31)
+    {
         if ($unit == 'date' && $maxday >= 1) {
             return range(1, $maxday);
         }
@@ -358,7 +368,8 @@ class Enum extends \yii\helpers\Inflector {
      * @return array
      * @throws InvalidConfigException if $unit passed is invalid
      */
-    public static function timeList($unit) {
+    public static function timeList($unit)
+    {
         $pre = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'];
         if ($unit == 'hour') {
             return array_merge($pre, range(10, 23));
@@ -381,7 +392,8 @@ class Enum extends \yii\helpers\Inflector {
      * @param string $false the label for the false value
      * @return array
      */
-    public static function boolList($true = 'Yes', $false = 'No') {
+    public static function boolList($true = 'Yes', $false = 'No')
+    {
         return [
             true => $true,
             false => $false
@@ -393,7 +405,8 @@ class Enum extends \yii\helpers\Inflector {
      * @param boolean $filterLocal whether to filter local & LAN IP (defaults to true)
      * @return string
      */
-    public static function userIP($filterLocal = true) {
+    public static function userIP($filterLocal = true)
+    {
         $ipSources = [
             'HTTP_CLIENT_IP',
             'HTTP_X_FORWARDED_FOR',

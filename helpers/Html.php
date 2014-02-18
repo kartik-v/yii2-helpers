@@ -18,7 +18,8 @@ use Yii;
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 2.0
  */
-class Html extends \yii\helpers\Html {
+class Html extends \yii\helpers\Html
+{
 
     /**
      * Bootstrap CSS helpers
@@ -69,7 +70,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#glyphicons
      */
-    public static function icon($icon, $options = [], $prefix = 'glyphicon glyphicon-', $tag = 'span') {
+    public static function icon($icon, $options = [], $prefix = 'glyphicon glyphicon-', $tag = 'span')
+    {
         $class = isset($options['class']) ? ' ' . $options['class'] : '';
         $options['class'] = $prefix . $icon . $class;
         return static::tag($tag, '', $options);
@@ -93,7 +95,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#labels
      */
-    public static function bsLabel($content, $type = '', $options = [], $prefix = 'label label-', $tag = 'span') {
+    public static function bsLabel($content, $type = '', $options = [], $prefix = 'label label-', $tag = 'span')
+    {
         if (Enum::isEmpty($type)) {
             $type = self::TYPE_DEFAULT;
         }
@@ -115,7 +118,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#badges
      */
-    public static function badge($content, $options = [], $tag = 'span') {
+    public static function badge($content, $options = [], $tag = 'span')
+    {
         static::addCssClass($options, 'badge');
         return static::tag($tag, $content, $options);
     }
@@ -179,7 +183,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#list-group
      */
-    public static function listGroup($items = [], $options = [], $tag = 'div', $itemTag = 'div') {
+    public static function listGroup($items = [], $options = [], $tag = 'div', $itemTag = 'div')
+    {
         static::addCssClass($options, 'list-group');
         $content = '';
         foreach ($items as $item) {
@@ -193,7 +198,8 @@ class Html extends \yii\helpers\Html {
      * @param array $item the list item configuration
      * @param string $tag the list item container tag
      */
-    protected static function generateListGroupItem($item, $tag) {
+    protected static function generateListGroupItem($item, $tag)
+    {
         static::addCssClass($item['options'], 'list-group-item');
 
         /* Parse item content */
@@ -283,7 +289,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#jumbotron
      */
-    public static function jumbotron($content = [], $fullWidth = false, $options = []) {
+    public static function jumbotron($content = [], $fullWidth = false, $options = [])
+    {
         static::addCssClass($options, 'jumbotron');
         if (is_string($content)) {
             $html = $content;
@@ -377,7 +384,8 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the panel
      * @see http://getbootstrap.com/components/#panels
      */
-    public static function panel($content = [], $type = 'default', $options = []) {
+    public static function panel($content = [], $type = 'default', $options = [])
+    {
         if (!is_array($content)) {
             return '';
         }
@@ -399,7 +407,8 @@ class Html extends \yii\helpers\Html {
      * @param array $content the panel content components.
      * @param string $type whether 'heading' or 'footer'
      */
-    protected static function generatePanelTitle($content, $type) {
+    protected static function generatePanelTitle($content, $type)
+    {
         if (!Enum::isEmpty($content[$type])) {
             $title = $content[$type];
             if (isset($content["{$type}Title"]) && $content["{$type}Title"]) {
@@ -428,7 +437,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#page-header
      */
-    public static function pageHeader($title, $subTitle = '', $options = []) {
+    public static function pageHeader($title, $subTitle = '', $options = [])
+    {
         static::addCssClass($options, 'page-header');
         if (!Enum::isEmpty($subTitle)) {
             $title = "<h1>{$title} <small>{$subTitle}</small></h1>";
@@ -459,7 +469,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#wells
      */
-    public static function well($content, $size = '', $options = []) {
+    public static function well($content, $size = '', $options = [])
+    {
         static::addCssClass($options, 'well');
         if (!Enum::isEmpty($size)) {
             static::addCssClass($options, 'well-' . $size);
@@ -492,7 +503,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#media
      */
-    public static function media($heading = '', $body = '', $src = '', $img = '', $srcOptions = [], $imgOptions = [], $options = [], $tag = 'div') {
+    public static function media($heading = '', $body = '', $src = '', $img = '', $srcOptions = [], $imgOptions = [], $options = [], $tag = 'div')
+    {
         static::addCssClass($options, 'media');
 
         if (!isset($srcOptions['class'])) {
@@ -559,7 +571,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/components/#media
      */
-    public static function mediaList($items = [], $options = []) {
+    public static function mediaList($items = [], $options = [])
+    {
         static::addCssClass($options, 'media-list');
         $content = static::generateMediaList($items);
         return static::tag('ul', $content, $options);
@@ -570,7 +583,8 @@ class Html extends \yii\helpers\Html {
      * @param array $items the media items
      * @param boolean $top whether item is the topmost parent
      */
-    protected static function generateMediaList($items, $top = true) {
+    protected static function generateMediaList($items, $top = true)
+    {
         $content = '';
         foreach ($items as $item) {
             $tag = ($top) ? 'li' : 'div';
@@ -587,7 +601,8 @@ class Html extends \yii\helpers\Html {
      * @param array $item the media item configuration
      * @param string $tag the media item container tag
      */
-    protected static function generateMediaItem($item, $tag) {
+    protected static function generateMediaItem($item, $tag)
+    {
         $heading = isset($item['heading']) ? $item['heading'] : '';
         $body = isset($item['body']) ? $item['body'] : '';
         $src = isset($item['src']) ? $item['src'] : '#';
@@ -613,7 +628,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/css/#helper-classes-close
      */
-    public static function closeButton($label = '&times;', $options = [], $tag = 'button') {
+    public static function closeButton($label = '&times;', $options = [], $tag = 'button')
+    {
         static::addCssClass($options, 'close');
         if ($tag == 'button') {
             $options['type'] = 'button';
@@ -638,7 +654,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/css/#helper-classes-carets
      */
-    public static function caret($direction = 'down', $disabled = false, $options = [], $tag = 'span') {
+    public static function caret($direction = 'down', $disabled = false, $options = [], $tag = 'span')
+    {
         static::addCssClass($options, 'caret');
 
         if (!isset($options['style'])) {
@@ -672,7 +689,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/css/#type-abbreviations
      */
-    public static function abbr($content, $title, $initialism = false, $options = []) {
+    public static function abbr($content, $title, $initialism = false, $options = [])
+    {
         $options['title'] = $title;
         if ($initialism) {
             static::addCssClass($options, 'initialism');
@@ -702,7 +720,8 @@ class Html extends \yii\helpers\Html {
      * @param array $options html options for the blockquote
      * @see http://getbootstrap.com/css/#type-blockquotes
      */
-    public static function blockquote($content, $citeContent = '', $citeTitle = '', $citeSource = '', $options = []) {
+    public static function blockquote($content, $citeContent = '', $citeTitle = '', $citeSource = '', $options = [])
+    {
         $content = static::tag('p', $content);
         if (!Enum::isEmpty($citeContent)) {
             $source = static::tag('cite', $citeSource, ['title' => $citeTitle]);
@@ -746,7 +765,8 @@ class Html extends \yii\helpers\Html {
      *
      * @see http://getbootstrap.com/css/#type-addresses
      */
-    public static function address($name, $lines = [], $phone = [], $email = [], $options = [], $phoneLabel = '(P)', $emailLabel = '(E)') {
+    public static function address($name, $lines = [], $phone = [], $email = [], $options = [], $phoneLabel = '(P)', $emailLabel = '(E)')
+    {
         $addresses = '';
         if (!empty($lines)) {
             $addresses = implode('<br>', $lines) . "<br>\n";
@@ -782,7 +802,8 @@ class Html extends \yii\helpers\Html {
      * @param array $options the HTML options
      * @return array
      */
-    public static function getCssStyles($options) {
+    public static function getCssStyles($options)
+    {
         $styles = [];
         if (isset($options['style'])) {
             $pairs = explode(';', $options['style']);
@@ -803,7 +824,8 @@ class Html extends \yii\helpers\Html {
      * @param array $styles the CSS styles array
      * @return string
      */
-    public static function parseCssStyle($styles = []) {
+    public static function parseCssStyle($styles = [])
+    {
         if (empty($styles)) {
             return '';
         }
@@ -826,7 +848,8 @@ class Html extends \yii\helpers\Html {
      * @param string $style the CSS style setting to be added
      * @param string $value the CSS style value for the setting
      */
-    public static function addCssStyle(&$options, $style, $value) {
+    public static function addCssStyle(&$options, $style, $value)
+    {
         $styles = static::getCssStyles($options);
         if (empty($styles[$style])) {
             $styles[trim($style)] = $value;
@@ -839,7 +862,8 @@ class Html extends \yii\helpers\Html {
      * @param array $options the options to be modified.
      * @param string $style the CSS style setting to be removed
      */
-    public static function removeCssStyle(&$options, $style) {
+    public static function removeCssStyle(&$options, $style)
+    {
         $styles = static::getCssStyles($options);
         unset($styles[trim($style)]);
         $options['style'] = static::parseCssStyle($styles);
@@ -853,7 +877,8 @@ class Html extends \yii\helpers\Html {
      * @param string $style the CSS style setting to be added
      * @param string $value the CSS style value for the setting
      */
-    public static function setCssStyle(&$options, $style, $value) {
+    public static function setCssStyle(&$options, $style, $value)
+    {
         $styles = static::getCssStyles($options);
         $styles[trim($style)] = $value;
         $options['style'] = static::parseCssStyle($styles);

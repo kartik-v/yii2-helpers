@@ -802,6 +802,7 @@ class Html extends \yii\helpers\Html
      * @param array $options the HTML options
      * @return array
      */
+    /** Commented since included in original Html Class 
     public static function getCssStyles($options)
     {
         $styles = [];
@@ -816,7 +817,8 @@ class Html extends \yii\helpers\Html
         }
         return $styles;
     }
-
+    */
+    
     /**
      * Parses the CSS Styles passed as an array 
      * (as processed by [[getCssStyles]]) and 
@@ -824,6 +826,7 @@ class Html extends \yii\helpers\Html
      * @param array $styles the CSS styles array
      * @return string
      */
+    /** Commented since included in original Html Class 
     public static function parseCssStyle($styles = [])
     {
         if (empty($styles)) {
@@ -840,6 +843,7 @@ class Html extends \yii\helpers\Html
         }
         return $style;
     }
+    */
 
     /**
      * Adds inline CSS styles to the specified options.
@@ -848,6 +852,7 @@ class Html extends \yii\helpers\Html
      * @param string $style the CSS style setting to be added
      * @param string $value the CSS style value for the setting
      */
+    /** Commented since included in original Html Class 
     public static function addCssStyle(&$options, $style, $value)
     {
         $styles = static::getCssStyles($options);
@@ -856,18 +861,21 @@ class Html extends \yii\helpers\Html
             $options['style'] = static::parseCssStyle($styles);
         }
     }
+    */
 
     /**
      * Removes a CSS style from the specified options.
      * @param array $options the options to be modified.
      * @param string $style the CSS style setting to be removed
      */
+    /** Commented since included in original Html Class 
     public static function removeCssStyle(&$options, $style)
     {
         $styles = static::getCssStyles($options);
         unset($styles[trim($style)]);
         $options['style'] = static::parseCssStyle($styles);
     }
+    */
 
     /**
      * Setup inline CSS styles to the specified options.
@@ -877,11 +885,12 @@ class Html extends \yii\helpers\Html
      * @param string $style the CSS style setting to be added
      * @param string $value the CSS style value for the setting
      */
+    /** Commented since included in original Html Class 
     public static function setCssStyle(&$options, $style, $value)
     {
         $styles = static::getCssStyles($options);
         $styles[trim($style)] = $value;
         $options['style'] = static::parseCssStyle($styles);
     }
-
+    */
 }

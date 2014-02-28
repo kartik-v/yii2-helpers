@@ -6,7 +6,7 @@ This extension is a collection of useful helper functions for Yii Framework 2.0.
 ### Html Class
 [```VIEW DEMO```](http://demos.krajee.com/helper-functions/html)  
 
-This class extends the [Yii Html Helper](https://github.com/yiisoft/yii2/blob/master/framework/helpers/Html.php) to incorporate additional HTML markup functionality and features available in [Twitter Bootstrap 3.0](http://getbootstrap.com/). The helper functions available in this class are:
+This class extends the [Yii Html Helper](https://github.com/yiisoft/yii2/blob/master/framework/helpers/Html.php) to incorporate additional HTML markup functionality and features available in [Bootstrap 3.0](http://getbootstrap.com/). The helper functions available in this class are:
 - Icon
 - Label
 - Badge

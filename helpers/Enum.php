@@ -404,7 +404,8 @@ class Enum extends \yii\helpers\Inflector
      * Convert a PHP array to HTML table
      * @param array $array the associative array to be converted
      * @param boolean $transpose whether to show keys as rows instead of columns.
-     *        This rule (if set to `true`) will be applied only if recursive is `false`.
+     * This parameter should be used only for a single dimensional associative array.
+     * If used for a multidimensional array, the sub array will be imploded as text.
      * @param boolean $recursive whether to recursively generate tables for multi-dimensional arrays
      * @param boolean $typeHint whether to show the data type as a hint
      * @param string $null the content to display for blank cells
@@ -426,7 +427,7 @@ class Enum extends \yii\helpers\Inflector
         // The header
         $table .= "\t<tr>";
 
-        if (!$recursive && $transpose) {
+        if ($transpose) {
             foreach ($array as $key => $value) {
                 if ($typeHint) {
                     $valueOptions['title'] = gettype(strtoupper($value));

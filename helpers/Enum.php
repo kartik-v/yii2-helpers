@@ -401,6 +401,94 @@ class Enum extends \yii\helpers\Inflector
     }
 
     /**
+     * Convert a PHP array to HTML table
+     * @param array $array the associative array to be converted
+     * @param boolean $recursive whether to recursively generate tables for multi-dimensional arrays
+     * @param boolean $transpose whether to show keys as rows instead of columns.
+     *        This rule (if set to `true`) will be applied only if recursive is `false`.
+     * @param boolean $typeHint whether to show the data type as a hint
+     * @param string $null the content to display for blank cells
+     * @param array $tableOptions the HTML attributes for the table
+     * @param array $keyOptions the HTML attributes for the array key
+     * @param array $valueOptions the HTML attributes for the array value
+     * @return string|boolean
+     */
+    public static function array2table($array, $recursive = false, $transpose = false, $typeHint = true, $tableOptions = ['class' => 'table table-bordered table-striped'], $keyOptions = [], $valueOptions = ['style' => 'cursor: default; border-bottom: 1px #aaa dashed;'], $null = '<span class="not-set">&nbsp;</span>')
+    {
+        // Sanity check
+        if (empty($array) || !is_array($array)) {
+            return false;
+        }
+
+        // Start the table
+        $table = Html::beginTag('table', $tableOptions) . "\n";
+
+        // The header
+        $table .= "\t<tr>";
+
+        if (!$recursive && $transpose) {
+            foreach ($array as $key => $value) {
+                if ($typeHint) {
+                    $valueOptions['title'] = gettype(strtoupper($value));
+                }
+
+                if (is_array($value)) {
+                    $value = '<pre>' . print_r($value, true) . '</pre>';
+                }
+                else {
+                    $value = Html::tag('span', $value, $valueOptions);
+                }
+                $table .= "\t\t<th>" . Html::tag('span', $key, $keyOptions) . "</th>" .
+                        "<td>" . $value . "</td>\n\t</tr>\n";
+            }
+            $table .= "</table>";
+            return $table;
+        }
+
+        if (!isset($array[0]) || !is_array($array[0])) {
+            $array = array($array);
+        }
+        // Take the keys from the first row as the headings
+        foreach (array_keys($array[0]) as $heading) {
+            $table .= '<th>' . Html::tag('span', $heading, $keyOptions) . '</th>';
+        }
+        $table .= "</tr>\n";
+
+        // The body
+        foreach ($array as $row) {
+            $table .= "\t<tr>";
+            foreach ($row as $cell) {
+                $table .= '<td>';
+
+                // Cast objects
+                if (is_object($cell)) {
+                    $cell = (array) $cell;
+                }
+
+                if ($recursive === true && is_array($cell) && !empty($cell)) {
+                    // Recursive mode
+                    $table .= "\n" . array2table($cell, true, true) . "\n";
+                }
+                else {
+                    if ($typeHint) {
+                        $valueOptions['title'] = gettype(strtoupper($cell));
+                    }
+                    $table .= (strlen($cell) > 0) ?
+                            Html::tag('span', htmlspecialchars((string) $cell), $valueOptions) :
+                            $null;
+                }
+
+                $table .= '</td>';
+            }
+
+            $table .= "</tr>\n";
+        }
+
+        $table .= '</table>';
+        return $table;
+    }
+
+    /**
      * Gets the user's IP address
      * @param boolean $filterLocal whether to filter local & LAN IP (defaults to true)
      * @return string
@@ -432,6 +520,123 @@ class Enum extends \yii\helpers\Inflector
             }
         }
         return 'Unknown';
+    }
+
+    /**
+     * Gets basic browser information
+     * @param boolean $common show common browsers only
+     * @param array $browsers the list of browsers
+     * @return array the browser information
+     */
+    public static function getBrowser($common = false, $browsers = [])
+    {
+        $agent = $_SERVER['HTTP_USER_AGENT'];
+        if ($common) {
+            $browsers = [
+                "opera" => "Opera",
+                "chrome" => "Google Chrome",
+                "safari" => "Safari",
+                "firefox" => "Mozilla Firefox",
+                "msie" => "Microsoft Internet Explorer",
+                "mobile safari" => "Mobile Safari",
+            ];
+        }
+        elseif (empty($browsers)) {
+            $browsers = [
+                "opera" => "Opera",
+                "maxthon" => "Maxthon",
+                "seamonkey" => "Mozilla Sea Monkey",
+                "arora" => "Arora",
+                "avant" => "Avant",
+                "omniweb" => "Omniweb",
+                "epiphany" => "Epiphany",
+                "chromium" => "Chromium",
+                "galeon" => "Galeon",
+                "puffin" => "Puffin",
+                "fennec" => "Mozilla Firefox Fennec",
+                "chrome" => "Google Chrome",
+                "mobile safari" => "Mobile Safari",
+                "safari" => "Apple Safari",
+                "firefox" => "Mozilla Firefox",
+                "iemobile" => "Microsoft Internet Explorer Mobile",
+                "msie" => "Microsoft Internet Explorer",
+                "konqueror" => "Konqueror",
+                "amaya" => "Amaya",
+                "omniweb" => "Omniweb",
+                "netscape" => "Netscape",
+                "mosaic" => "Mosaic",
+                "netsurf" => "NetSurf",
+                "netfront" => "NetFront",
+                "minimo" => "Minimo",
+                "blackberry" => "Blackberry",
+            ];
+        }
+        $info = [
+            'agent' => $agent,
+            'code' => 'other',
+            'name' => 'Other',
+            'version' => "?",
+            'platform' => 'Unknown'
+        ];
+
+        if (preg_match('/iphone|ipod|ipad/i', $agent)) {
+            $info['platform'] = 'ios';
+        }
+        elseif (preg_match('/android/i', $agent)) {
+            $info['platform'] = 'android';
+        }
+        elseif (preg_match('/symbian/i', $agent)) {
+            $info['platform'] = 'symbian';
+        }
+        elseif (preg_match('/maemo/i', $agent)) {
+            $info['platform'] = 'maemo';
+        }
+        elseif (preg_match('/palm/i', $agent)) {
+            $info['platform'] = 'palm';
+        }
+        elseif (preg_match('/linux/i', $agent)) {
+            $info['platform'] = 'linux';
+        }
+        elseif (preg_match('/mac/i', $agent)) {
+            $info['platform'] = 'mac';
+        }
+        elseif (preg_match('/win/i', $agent)) {
+            $info['platform'] = 'windows';
+        }
+        elseif (preg_match('/x11|bsd|sun/i', $agent)) {
+            $info['platform'] = 'unix';
+        }
+
+        foreach ($browsers as $code => $name) {
+            if (preg_match("/{$code}/i", $agent)) {
+                $info['code'] = $code;
+                $info['name'] = $name;
+                $info['version'] = static::getBrowserVer($agent, $code);
+                return $info;
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * Returns browser version
+     * @param string $agent
+     * @param browser $code
+     * @return float
+     */
+    protected static function getBrowserVer($agent, $code)
+    {
+        $version = '?';
+        $pattern = '#(?<browser>' . $code . ')[/v ]+(?<version>[0-9]+(?:\.[0-9]+)?)#';
+        if ($code == 'blackberry') {
+            $pattern = '#(?<browser>' . $code . ')[/v0-9 ]+(?<version>[0-9]+(?:\.[0-9]+)?)#';
+        }
+        if (preg_match_all($pattern, strtolower($agent), $matches)) {
+            $i = count($matches['browser']) - 1;
+            $ver = [$matches['browser'][$i] => $matches['version'][$i]];
+            $version = empty($ver[$code]) ? '?' : $ver[$code];
+        }
+        return $version;
     }
 
 }

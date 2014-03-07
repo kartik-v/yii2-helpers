@@ -403,9 +403,9 @@ class Enum extends \yii\helpers\Inflector
     /**
      * Convert a PHP array to HTML table
      * @param array $array the associative array to be converted
-     * @param boolean $recursive whether to recursively generate tables for multi-dimensional arrays
      * @param boolean $transpose whether to show keys as rows instead of columns.
      *        This rule (if set to `true`) will be applied only if recursive is `false`.
+     * @param boolean $recursive whether to recursively generate tables for multi-dimensional arrays
      * @param boolean $typeHint whether to show the data type as a hint
      * @param string $null the content to display for blank cells
      * @param array $tableOptions the HTML attributes for the table
@@ -413,7 +413,7 @@ class Enum extends \yii\helpers\Inflector
      * @param array $valueOptions the HTML attributes for the array value
      * @return string|boolean
      */
-    public static function array2table($array, $recursive = false, $transpose = false, $typeHint = true, $tableOptions = ['class' => 'table table-bordered table-striped'], $keyOptions = [], $valueOptions = ['style' => 'cursor: default; border-bottom: 1px #aaa dashed;'], $null = '<span class="not-set">&nbsp;</span>')
+    public static function array2table($array, $transpose = false, $recursive = false, $typeHint = true, $tableOptions = ['class' => 'table table-bordered table-striped'], $keyOptions = [], $valueOptions = ['style' => 'cursor: default; border-bottom: 1px #aaa dashed;'], $null = '<span class="not-set">NULL</span>')
     {
         // Sanity check
         if (empty($array) || !is_array($array)) {

@@ -401,6 +401,43 @@ class Enum extends \yii\helpers\Inflector
     }
 
     /**
+     * Parses and returns a variable type
+     * @param type $var
+     * @return string
+     */
+    protected static function getType($var)
+    {
+        if (is_array($var)) {
+            return 'array';
+        }
+        elseif (is_object($var)) {
+            return 'object';
+        }
+        elseif (is_resource($var)) {
+            return 'resource';
+        }
+        elseif (is_null($var)) {
+            return 'NULL';
+        }
+        elseif (is_bool($var)) {
+            return 'boolean';
+        }
+        elseif (is_float($var) || (is_numeric(str_replace(',', '', $var)) && strpos($var, '.') > 0 && is_float((float) str_replace(',', '', $var)))) {
+            return 'float';
+        }
+        elseif (is_int($var) || (is_numeric($var) && is_int((int) $var))) {
+            return 'integer';
+        }
+        elseif (is_scalar($var) && strtotime($var) !== false) {
+            return 'datetime';
+        }
+        elseif (is_scalar($var)) {
+            return 'string';
+        }
+        return 'unknown';
+    }
+
+    /**
      * Convert a PHP array to HTML table
      * @param array $array the associative array to be converted
      * @param boolean $transpose whether to show keys as rows instead of columns.
@@ -414,7 +451,7 @@ class Enum extends \yii\helpers\Inflector
      * @param array $valueOptions the HTML attributes for the array value
      * @return string|boolean
      */
-    public static function array2table($array, $transpose = false, $recursive = false, $typeHint = true, $tableOptions = ['class' => 'table table-bordered table-striped'], $keyOptions = [], $valueOptions = ['style' => 'cursor: default; border-bottom: 1px #aaa dashed;'], $null = '<span class="not-set">NULL</span>')
+    public static function array2table($array, $transpose = false, $recursive = false, $typeHint = true, $tableOptions = ['class' => 'table table-bordered table-striped'], $keyOptions = [], $valueOptions = ['style' => 'cursor: default; border-bottom: 1px #aaa dashed;'], $null = '<span class="not-set">(not set)</span>')
     {
         // Sanity check
         if (empty($array) || !is_array($array)) {
@@ -430,7 +467,7 @@ class Enum extends \yii\helpers\Inflector
         if ($transpose) {
             foreach ($array as $key => $value) {
                 if ($typeHint) {
-                    $valueOptions['title'] = gettype(strtoupper($value));
+                    $valueOptions['title'] = self::getType(strtoupper($value));
                 }
 
                 if (is_array($value)) {
@@ -471,12 +508,19 @@ class Enum extends \yii\helpers\Inflector
                     $table .= "\n" . array2table($cell, true, true) . "\n";
                 }
                 else {
-                    if ($typeHint) {
-                        $valueOptions['title'] = gettype(strtoupper($cell));
+                    if (!is_null($cell) && is_bool($cell)) {
+                        $val = $cell ? 'true' : 'false';
+                        $type = 'boolean';
                     }
-                    $table .= (strlen($cell) > 0) ?
-                            Html::tag('span', htmlspecialchars((string) $cell), $valueOptions) :
-                            $null;
+                    else {
+                        $chk = (strlen($cell) > 0);
+                        $type = $chk ? self::getType($cell) : 'NULL';
+                        $val = $chk ? htmlspecialchars((string) $cell) : $null;
+                    }
+                    if ($typeHint) {
+                        $valueOptions['title'] = $type;
+                    }
+                    $table .= Html::tag('span', $val, $valueOptions);
                 }
 
                 $table .= '</td>';

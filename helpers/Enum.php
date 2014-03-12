@@ -405,7 +405,7 @@ class Enum extends \yii\helpers\Inflector
      * @param type $var
      * @return string
      */
-    protected static function getType($var)
+    public static function getType($var)
     {
         if (is_array($var)) {
             return 'array';

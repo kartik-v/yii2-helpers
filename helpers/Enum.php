@@ -402,7 +402,7 @@ class Enum extends \yii\helpers\Inflector
 
     /**
      * Parses and returns a variable type
-     * @param type $var
+     * @param string $var the variable to be parsed
      * @return string
      */
     public static function getType($var)

@@ -20,7 +20,6 @@ use yii\base\InvalidConfigException;
 class Enum extends \yii\helpers\Inflector
 {
 	/* list of ones */
-
 	public static $ones = [
 		"",
 		" one",

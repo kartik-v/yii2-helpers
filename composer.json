@@ -13,8 +13,8 @@
         }
     ],
     "require": {
-        "yiisoft/yii2": "dev-master",
-        "yiisoft/yii2-bootstrap": "dev-master"
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*"
     },
     "autoload": {
         "psr-4": {

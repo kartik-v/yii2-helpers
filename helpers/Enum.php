@@ -550,9 +550,11 @@ class Enum extends \yii\helpers\Inflector
      * @param array $browsers the list of browsers
      * @return array the browser information
      */
-    public static function getBrowser($common = false, $browsers = [])
+    public static function getBrowser($common = false, $browsers = [], $agent = null)
     {
-        $agent = $_SERVER['HTTP_USER_AGENT'];
+        if ($agent === null) {
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+        }
         if ($common) {
             $browsers = [
                 "opera" => "Opera",

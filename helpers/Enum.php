@@ -11,7 +11,7 @@ namespace kartik\helpers;
 use yii\base\InvalidConfigException;
 
 /**
- * Collection of useful helpers for Yii Applications
+ * Collection of useful helper functions for Yii Applications
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 1.0
@@ -548,6 +548,7 @@ class Enum extends \yii\helpers\Inflector
      *
      * @param boolean $common show common browsers only
      * @param array $browsers the list of browsers
+     * @param string $agent user agent
      * @return array the browser information
      */
     public static function getBrowser($common = false, $browsers = [], $agent = null)

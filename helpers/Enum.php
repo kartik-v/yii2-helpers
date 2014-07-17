@@ -212,6 +212,62 @@ class Enum extends \yii\helpers\Inflector
         return trim($output);
     }
 
+
+    /**
+     * Get time remaining (Facebook Style)
+     *
+     * Example Output(s):
+     *     10 hours to go
+     *
+     * @param string $futureTime future date time
+     * @param boolean $human if true returns an approximate human friendly output
+     * If set to false will attempt an exact conversion of time intervals.
+     * @param string $currentTime current date time (defaults to current system time)
+     * @param string $append the string to append for the converted elapsed time
+     * (default: 'until the deadline')
+     * @return string
+     */
+    public static function timeRemaining($futureTime = null, $human = true, $currentTime = null, $append = ' until the deadline')
+    {
+        $remaining = '';
+        if ($futureTime != null) {
+            $futureTime = strtotime($futureTime);
+            $currentTime = ($currentTime == null) ? time() : (int)$currentTime;
+            $diff = $futureTime - $currentTime;
+            $intervals = static::$intervals;
+
+            if ($human) {
+                // now we just find the difference
+                if ($diff <= 0) {
+                    $remaining = 'a moment to go';
+                } elseif ($diff < 60) {
+                    $remaining = $diff == 1 ? $diff . ' second to go' : $diff . ' seconds' . $append;
+                } elseif ($diff >= 60 && $diff < $intervals['hour']) {
+                    $diff = floor($diff / $intervals['minute']);
+                    $remaining = $diff == 1 ? $diff . ' minute to go' : $diff . ' minutes' . $append;
+                } elseif ($diff >= $intervals['hour'] && $diff < $intervals['day']) {
+                    $diff = floor($diff / $intervals['hour']);
+                    $remaining = $diff == 1 ? $diff . ' hour to go' : $diff . ' hours' . $append;
+                } elseif ($diff >= $intervals['day'] && $diff < $intervals['week']) {
+                    $diff = floor($diff / $intervals['day']);
+                    $remaining = $diff == 1 ? $diff . ' day to go' : $diff . ' days' . $append;
+                } elseif ($diff >= $intervals['week'] && $diff < $intervals['month']) {
+                    $diff = floor($diff / $intervals['week']);
+                    $remaining = $diff == 1 ? $diff . ' week to go' : $diff . ' weeks to go';
+                } elseif ($diff >= $intervals['month'] && $diff < $intervals['year']) {
+                    $diff = floor($diff / $intervals['month']);
+                    $remaining = $diff == 1 ? $diff . ' month to go' : $diff . ' months' . $append;
+                } elseif ($diff >= $intervals['year']) {
+                    $diff = floor($diff / $intervals['year']);
+                    $remaining = $diff == 1 ? $diff . ' year to go' : $diff . ' years' . $append;
+                }
+            } else {
+                $remaining = static::time2String($diff, $intervals) . $append;
+            }
+        }
+        return $remaining;
+    }
+
     /**
      * Format and convert "bytes" to its
      * optimal higher metric unit

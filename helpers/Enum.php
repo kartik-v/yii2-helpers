@@ -122,6 +122,20 @@ class Enum extends \yii\helpers\Inflector
     }
 
     /**
+     * Check if a value exists in the array. This method is faster
+     * in performance than the built in PHP in_array method.
+     *
+     * @param string $needle the value to search
+     * @param array $haystack the array to scan
+     * @return boolean
+     */
+    public static function inArray($needle, $haystack)
+    {
+        $flippedHaystack = array_flip($haystack);
+        return isset($flippedHaystack[$needle]);
+    }
+
+    /**
      * Properize a string for possessive punctuation.
      * e.g.
      *     properize("Chris"); //returns Chris'
@@ -211,7 +225,6 @@ class Enum extends \yii\helpers\Inflector
         }
         return trim($output);
     }
-
 
     /**
      * Get time remaining (Facebook Style)

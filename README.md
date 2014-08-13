@@ -34,14 +34,19 @@ This class extends the [Yii Html Helper](https://github.com/yiisoft/yii2/blob/ma
 
 This class extends the [Yii Inflector Helper](https://github.com/yiisoft/yii2/blob/master/framework/helpers/Inflector.php) with more utility functions for Yii developers. The helper functions available in this class are:
 - Is Empty
+- In Array
 - Properize
 - Time Elapsed
+- Time To String
+- Time Remaining
 - Format Bytes
 - Number to Words
 - Year List
 - Date List
 - Time List
 - Boolean List
+- Get PHP Data Type
+- Array to HTML Table
 - IP Address
 
 ### Demo

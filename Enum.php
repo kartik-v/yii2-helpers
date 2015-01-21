@@ -90,7 +90,7 @@ class Enum extends \yii\helpers\Inflector
 
     /* list of days of week */
     public static $days = [
-        'Sunday',
+        1 => 'Sunday',
         'Monday',
         'Tuesday',
         'Wednesday',
@@ -392,30 +392,73 @@ class Enum extends \yii\helpers\Inflector
     }
 
     /**
-     * Generate a date picker array list for Gregorian Calendar
+     * Generate a date picker array list for Gregorian Calendar.
+     * Note that first week day is always Sunday.
      *
      * @param string $unit the date unit ('date', 'day', 'month')
      * @param boolean $abbr whether to return abbreviated day or month
-     * @param integer $maxday the maximum date if $unit = 'date'
+     * @param integer $maxDay the maximum date if $unit = 'date'
      * @return array
-     * @throws InvalidConfigException if $unit passed is invalid
+     * @throws InvalidConfigException if $unit passed is invalid or $maxDay < 1
      */
-    public static function dateList($unit, $abbr = false, $maxday = 31)
+    public static function dateList($unit, $abbr = false, $maxDay = 31)
     {
-        if ($unit == 'date' && $maxday >= 1) {
-            return range(1, $maxday);
-        } else {
+        switch($unit)
+        {
+            case 'date':
+                if ($maxDay < 1) {
+                    throw new InvalidConfigException("Invalid maxDay passed. Must be greater or equal than 1");
+                }
+                return range(1, $maxDay);
+            
+            case 'day':
+                return self::dayList($abbr);
+            
+            case 'month':
+                $return = static::$months;
+                break;
+            
+            default:
+                throw new InvalidConfigException("Invalid date unit passed. Must be 'date', 'day', or 'month'.");
+        }
+        
+        if ($abbr) {
             $substr = function ($element) {
                 return substr($element, 0, 3);
             };
+            
+            return array_map($substr, $return);
         }
-        if ($unit == 'month') {
-            return $abbr ? array_map($substr, static::$months) : static::$months;
-        } elseif ($unit == 'day') {
-            return $abbr ? array_map($substr, static::$days) : static::$days;
-        } else {
-            throw new InvalidConfigException("Invalid date unit passed. Must be 'date', 'day', or 'month'.");
+        
+        return $return;
+    }
+    
+    /**
+     * Generate a day array list for Gregorian calendar
+     * @param boolean $abbr whether to return abbreviated day or month
+     * @param boolean $mondayFirstDay to return Monday first instead of Sunday
+     * @return array List of days
+     */
+    public static function dayList( $abbr = false, $mondayFirstDay = false )
+    {
+        $days = self::$days;
+
+        if ($mondayFirstDay) {
+            $lastDay = array_shift($days);
+            $days[] = $lastDay;
+            // Re-index from 1
+            $days = array_combine(range(1, count($days)), array_values($days));
         }
+        
+        if ($abbr) {
+            $substr = function ($element) {
+                return substr($element, 0, 3);
+            };
+            
+            return array_map($substr, $days);
+        }
+        
+        return $days;
     }
 
     /**

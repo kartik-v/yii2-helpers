@@ -449,8 +449,8 @@ class Enum extends \yii\helpers\Inflector
     public static function boolList($true = 'Yes', $false = 'No')
     {
         return [
-            true => $true,
-            false => $false
+            false => $false,    // == 0
+            true => $true,      // == 1
         ];
     }
 

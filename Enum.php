@@ -545,11 +545,13 @@ class Enum extends \yii\helpers\Inflector
      * @param integer $to the end day, defaults to 31
      * @param integer $from the start day, defaults to 1
      * @param integer $interval the date interval, defaults to 1.
+     * @param integer $intervalFromZero whether to start incrementing intervals from zero if $from = 1.
+     * @param integer $showLast whether to show the last date (set in $to) even if it does not match interval.
      *
      * @return array
      * @throws InvalidConfigException
      */
-    public static function dateList($from = 1, $to = 31, $interval = 1)
+    public static function dateList($from = 1, $to = 31, $interval = 1, $intervalFromZero = true, $showLast = true)
     {
         if ($to < 1 || $from < 1) {
             $val = $from < 1 ? "from day '{$from}'" : "to day '{$to}'";
@@ -561,7 +563,17 @@ class Enum extends \yii\helpers\Inflector
         if ($to > 31) {
             throw new InvalidConfigException("Invalid value for to day '{$to}' passed. Must be less than or equal to 31");
         }
-        return range($from, $to, $interval);
+        if ($from > 1 || $interval == 1 || !$intervalFromZero) {
+            $out = range($from, $to, $interval);
+        } else {
+            $out = range(0, $to, $interval);
+            $out[0] = 1;
+        }
+        $len = count($out);
+        if ($showLast && $out[$len - 1] != $to) {
+            $out[$len] = $to;
+        }
+        return $out;
     }
 
     /**

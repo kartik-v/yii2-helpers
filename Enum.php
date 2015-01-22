@@ -462,24 +462,97 @@ class Enum extends \yii\helpers\Inflector
     }
 
     /**
+     * Generate a number list string array
+     * @param integer $to value
+     * @param integer $from value
+     * @param integer $interval value
+     * @return type
+     */
+    protected static function getNumberList( $to, $from = null, $interval = null )
+    {
+        $result = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'];
+        
+        if( $to > 9 ) {
+            $result = array_merge($result, range(10, $to));
+            
+        } elseif ($to < 9 ) {
+            $result = array_slice( $result, 0, $to + 1 );
+        }
+        
+        if ($from) {
+            if ($from > $to) {
+                throw new InvalidConfigException('Invalid use : $from must be less or equal to $to value');
+            } 
+            
+            $result = array_slice($result, $from + 1);
+        } else {
+            $from = 0;
+        }
+        
+        if ($interval) {
+            if ($interval < 1) {
+                throw new InvalidConfigException('Invalid use : $interval has to be greater than 0');
+                
+            } elseif ($interval > 1) {
+
+                if ($to >= $interval) {
+                    $newResult = [];
+                    foreach( range($from, $to, $interval) as $key ) {
+                        $newResult[] = $result[$key];
+                    }
+                
+                    return $newResult;
+                }
+
+                // Drop last value ($interval > $to)
+                array_pop( $result );
+                return $result;
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Generate a time picker array list
      *
      * @param string $unit the time unit ('hour', 'min', 'sec', 'ms')
-     * @return array
+     * @param integer $from value (max depending on unit)
+     * @param integer $to value (max depending on unit)
+     * @param integer $interval of values
+     * @return array of values
      * @throws InvalidConfigException if $unit passed is invalid
      */
-    public static function timeList($unit)
+    public static function timeList($unit, $from = null, $to = null, $interval = null)
     {
-        $pre = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09'];
-        if ($unit == 'hour') {
-            return array_merge($pre, range(10, 23));
-        } elseif ($unit == 'min' || $unit == 'sec') {
-            return array_merge($pre, range(10, 59));
-        } elseif ($unit == 'ms') {
-            return array_merge($pre, range(10, 1000));
-        } else {
-            throw new InvalidConfigException("Invalid time unit passed. Must be 'hour', 'min', 'sec', or 'ms'.");
+        switch ($unit) {
+            case 'hour':
+                $defaultTo = $maxTo = 23;
+                break;
+            
+            case 'min':
+            case 'sec':
+                $defaultTo = $maxTo = 59;
+                break;
+            
+            case 'ms':
+                $defaultTo = 1000;
+                break;
+            
+            default:
+                throw new InvalidConfigException("Invalid time unit passed. Must be 'hour', 'min', 'sec', or 'ms'.");
         }
+        
+        if ($to) {
+            if ($to < 0) {
+                throw new InvalidConfigException('$to value can\'t be less than 0 for ' . $unit . ' unit.');
+            }
+            if ($maxTo && $to > $maxTo) {
+                throw new InvalidConfigException('$to value can\'t be more than ' . $maxTo . ' for ' . $unit . ' unit.');
+            }
+        } else { $to = $defaultTo; }
+        
+        return self::getNumberList( $to, $from, $interval );
     }
 
     /**

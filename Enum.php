@@ -542,8 +542,8 @@ class Enum extends \yii\helpers\Inflector
     /**
      * Generate a date picker array list for Gregorian Calendar.
      *
-     * @param integer $to the end day, defaults to 31
      * @param integer $from the start day, defaults to 1
+     * @param integer $to the end day, defaults to 31
      * @param integer $interval the date interval, defaults to 1.
      * @param integer $intervalFromZero whether to start incrementing intervals from zero if $from = 1.
      * @param integer $showLast whether to show the last date (set in $to) even if it does not match interval.

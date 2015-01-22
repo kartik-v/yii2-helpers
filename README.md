@@ -36,6 +36,8 @@ This class extends the [Yii Inflector Helper](https://github.com/yiisoft/yii2/bl
 - Format Bytes
 - Number to Words
 - Year List
+- Month List
+- Day List
 - Date List
 - Time List
 - Boolean List

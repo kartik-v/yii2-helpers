@@ -1,3 +1,12 @@
+version 1.3.0
+=============
+**Date:** 22-Jan-2015
+
+- (enh #7): Implement translations.
+- (enh #8): Convert days, months, ones, tens, triplets to static methods
+- (enh #9): Add/Enhance new methods for `dayList`, `monthList` and `dateList`.
+- (enh #10): Enhance `timeList` method to include ranges and intervals.
+
 version 1.2.0
 =============
 **Date:** 10-Nov-2014

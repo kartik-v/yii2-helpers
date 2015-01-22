@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014
  * @package yii2-helpers
- * @version 1.2.0
+ * @version 1.3.0
  */
 
 namespace kartik\helpers;
@@ -779,6 +779,7 @@ class Html extends \yii\helpers\Html
      */
     public static function address($name, $lines = [], $phone = [], $email = [], $options = [], $phoneLabel = '(P)', $emailLabel = '(E)')
     {
+        Enum::initI18N();
         $addresses = '';
         if (!empty($lines)) {
             $addresses = implode('<br>', $lines) . "<br>\n";
@@ -787,9 +788,9 @@ class Html extends \yii\helpers\Html
         $phones = '';
         foreach ($phone as $type => $number) {
             if (is_numeric($type)) { // no keys were passed to the phone array
-                $type = static::tag('abbr', $phoneLabel, ['title' => Yii::t('app', 'Phone')]) . ': ';
+                $type = static::tag('abbr', $phoneLabel, ['title' => Yii::t('kvenum', 'Phone')]) . ': ';
             } else {
-                $type = static::tag('abbr', $phoneLabel . ' ' . $type, ['title' => Yii::t('app', 'Phone')]) . ': ';
+                $type = static::tag('abbr', $phoneLabel . ' ' . $type, ['title' => Yii::t('kvenum', 'Phone')]) . ': ';
             }
             $phones .= "{$type}{$number}<br>\n";
         }
@@ -797,9 +798,9 @@ class Html extends \yii\helpers\Html
         $emails = '';
         foreach ($email as $type => $addr) {
             if (is_numeric($type)) { // no keys were passed to the email array
-                $type = Html::tag('abbr', $emailLabel, ['title' => Yii::t('app', 'Email')]) . ': ';
+                $type = Html::tag('abbr', $emailLabel, ['title' => Yii::t('kvenum', 'Email')]) . ': ';
             } else {
-                $type = Html::tag('abbr', $emailLabel . ' ' . $type, ['title' => Yii::t('app', 'Email')]) . ': ';
+                $type = Html::tag('abbr', $emailLabel . ' ' . $type, ['title' => Yii::t('kvenum', 'Email')]) . ': ';
             }
             $emails .= $type . static::mailto($addr, $addr) . "<br>\n";
         }

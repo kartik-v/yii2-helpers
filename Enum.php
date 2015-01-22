@@ -473,6 +473,45 @@ class Enum extends \yii\helpers\Inflector
     }
 
     /**
+     * Generate a month or day array list for Gregorian calendar
+     *
+     * @param string  $unit whether 'day' or 'month'
+     * @param boolean $abbr whether to return abbreviated day or month
+     * @param boolean $start the first day or month to set. Defaults to `1`.
+     * @param string  $case whether 'upper', lower', or null. If null, then
+     * the initcap case will be used.
+     *
+     * @return array list of days or months
+     */
+    protected static function genCalList($unit = 'day', $abbr = false, $start = 1, $case = null)
+    {
+        $source = $unit == 'month' ? static::months() : static::days();
+        $total = count($source);
+        if ($start < 1 || $start > $total) {
+            throw new InvalidConfigException("The start '{$unit}' must be between 1 and {$total}.");
+        }
+        $converted = [];
+        foreach ($source as $key => $value) {
+            $data = $abbr ? substr($value, 0, 3) : $value;
+            if ($case == 'upper') {
+                $data = strtoupper($data);
+            } elseif ($case == 'lower') {
+                $data = strtolower($data);
+            }
+            if ($start == 1) {
+                $i = $key;
+            } else {
+                $i = ($start - $key + 1);
+                if ($i < 1) {
+                    $i += $total;
+                }
+            }
+            $converted[$i] = $data;
+        }
+        return (ksort($converted) ? $converted : $source);
+    }
+
+    /**
      * Generate a month array list for Gregorian calendar
      *
      * @param boolean $abbr whether to return abbreviated month
@@ -497,7 +536,7 @@ class Enum extends \yii\helpers\Inflector
      */
     public static function dayList($abbr = false, $start = 1, $case = null)
     {
-        return static::genCalList('month', $abbr, $start, $case);
+        return static::genCalList('day', $abbr, $start, $case);
     }
 
     /**
@@ -869,37 +908,5 @@ class Enum extends \yii\helpers\Inflector
             $version = empty($ver[$code]) ? '?' : $ver[$code];
         }
         return $version;
-    }
-
-    /**
-     * Generate a month or day array list for Gregorian calendar
-     *
-     * @param string  $unit whether 'day' or 'month'
-     * @param boolean $abbr whether to return abbreviated day or month
-     * @param boolean $start the first day or month to set. Defaults to `1`.
-     * @param string  $case whether 'upper', lower', or null. If null, then
-     * the initcap case will be used.
-     *
-     * @return array list of days or months
-     */
-    protected static function genCalList($unit = 'day', $abbr = false, $start = 1, $case = null)
-    {
-        $source = $unit == 'month' ? static::months() : static::days();
-        $total = count($source);
-        if ($start < 1 || $start > $total) {
-            throw new InvalidConfigException("The start '{$unit}' must be between 1 and {$total}.");
-        }
-        $converted = [];
-        foreach ($source as $key => $value) {
-            $data = $abbr ? substr($value, 0, 3) : $value;
-            if ($case == 'upper') {
-                $data = strtoupper($data);
-            } elseif ($case == 'lower') {
-                $data = strtolower($data);
-            }
-            $i = $start == 1 ? $key : ($key + $start) % $total;
-            $converted[$i] = $data;
-        }
-        return (ksort($converted) ? $converted : $source);
     }
 }

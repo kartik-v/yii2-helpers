@@ -516,7 +516,8 @@ class Enum extends \yii\helpers\Inflector
      *
      * @param boolean $abbr whether to return abbreviated month
      * @param boolean $start the first month to set. Defaults to `1` for `January`.
-     * @param string  $case whether 'upper', lower', or null. I
+     * @param string  $case whether 'upper', lower', or null. If null, then
+     * the initcap case will be used.
      *
      * @return array list of months
      */
@@ -530,7 +531,8 @@ class Enum extends \yii\helpers\Inflector
      *
      * @param boolean $abbr whether to return abbreviated day
      * @param boolean $start the first day to set. Defaults to `1` for `Sunday`.
-     * @param string  $case whether 'upper', lower', or null. I
+     * @param string  $case whether 'upper', lower', or null. If null, then
+     * the initcap case will be used.
      *
      * @return array list of days
      */

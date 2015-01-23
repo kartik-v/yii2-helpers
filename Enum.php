@@ -501,7 +501,7 @@ class Enum extends \yii\helpers\Inflector
             if ($start == 1) {
                 $i = $key;
             } else {
-                $i = ($start - $key + 1);
+                $i = $key - $start + 1;
                 if ($i < 1) {
                     $i += $total;
                 }

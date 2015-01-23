@@ -6,6 +6,7 @@ version 1.3.0
 - (enh #8): Convert days, months, ones, tens, triplets to static methods
 - (enh #9): Add/Enhance new methods for `dayList`, `monthList` and `dateList`.
 - (enh #10): Enhance `timeList` method to include ranges and intervals.
+- (enh #11): Add French Translations and fix `genCalList`.
 
 version 1.2.0
 =============

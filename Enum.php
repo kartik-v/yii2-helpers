@@ -681,17 +681,30 @@ class Enum extends \yii\helpers\Inflector
 
         if ($transpose) {
             foreach ($array as $key => $value) {
-                if ($typeHint) {
-                    $valueOptions['title'] = self::getType(strtoupper($value));
-                }
+                if(!is_array($value)){
+                    if ($typeHint) {
+                        $valueOptions['title'] = self::getType(strtoupper($value));
+                    }
 
-                if (is_array($value)) {
-                    $value = '<pre>' . print_r($value, true) . '</pre>';
-                } else {
-                    $value = Html::tag('span', $value, $valueOptions);
+                    if (is_array($value)) {
+                        $value = '<pre>' . print_r($value, true) . '</pre>';
+                    } else {
+                        $value = Html::tag('span', $value, $valueOptions);
+                    }
+                    $table .= "\t\t<th>" . Html::tag('span', $key, $keyOptions) . "</th>" .
+                        "<td>" . $value . "</td>\n\t</tr>\n";
                 }
-                $table .= "\t\t<th>" . Html::tag('span', $key, $keyOptions) . "</th>" .
-                    "<td>" . $value . "</td>\n\t</tr>\n";
+                else{
+                    $value = array_map(function($element) use ($valueOptions, $typeHint) {
+                        if ($typeHint) {
+                            $valueOptions['title'] = self::getType(strtoupper($element));
+                        }
+                        return Html::tag('span', $element, $valueOptions);
+                    }, $value);
+                    $table .= "\t\t<th>" . Html::tag('span', $key, $keyOptions) . "</th>" .
+                        "<td>" . implode("</td>\n\t<td>", $value) . "</td>\n\t" .
+                        "</tr>\n";
+                }
             }
             $table .= "</table>";
             return $table;

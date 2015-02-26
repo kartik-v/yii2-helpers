@@ -1,6 +1,12 @@
 yii2-helpers
 ============
 
+[![Latest Stable Version](https://poser.pugx.org/kartik-v/yii2-helpers/v/stable.svg)](https://packagist.org/packages/kartik-v/yii2-helpers)
+[![License](https://poser.pugx.org/kartik-v/yii2-helpers/license.svg)](https://packagist.org/packages/kartik-v/yii2-helpers)
+[![Total Downloads](https://poser.pugx.org/kartik-v/yii2-helpers/downloads.svg)](https://packagist.org/packages/kartik-v/yii2-helpers)
+[![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-helpers/d/monthly.png)](https://packagist.org/packages/kartik-v/yii2-helpers)
+[![Daily Downloads](https://poser.pugx.org/kartik-v/yii2-helpers/d/daily.png)](https://packagist.org/packages/kartik-v/yii2-helpers)
+
 This extension is a collection of useful helper functions for Yii Framework 2.0.
 
 ### Html Class

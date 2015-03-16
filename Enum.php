@@ -821,6 +821,7 @@ class Enum extends \yii\helpers\Inflector
      */
     public static function getBrowser($common = false, $browsers = [], $agent = null)
     {
+        static::initI18N();
         if ($agent === null) {
             $agent = $_SERVER['HTTP_USER_AGENT'];
         }

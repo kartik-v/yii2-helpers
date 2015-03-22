@@ -1,3 +1,10 @@
+version 1.3.1
+=============
+**Date:** 23-Mar-2015
+
+- (enh #15): Initialize i18N for getBrowser method.
+- (enh #16): Add russian translation messages.
+
 version 1.3.0
 =============
 **Date:** 23-Jan-2015

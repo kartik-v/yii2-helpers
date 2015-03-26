@@ -114,5 +114,5 @@ return [
     '{n, plural, one{one month} other{# months}}' => '{n, plural, one{один месяц} other{# месяцев}}',
     '{n, plural, one{one second} other{# seconds}}' => '{n, plural, one{одна секунда} other{# секунд}}',
     '{n, plural, one{one week} other{# weeks}}' => '{n, plural, one{одна неделя} other{# недель}}',
-    '{n, plural, one{one year} other{# years}}' => '{n, plural, one{одн год} other{# лет}}',
+    '{n, plural, one{one year} other{# years}}' => '{n, plural, one{один год} other{# лет}}',
 ];

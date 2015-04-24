@@ -34,7 +34,7 @@ return [
     'Google Chrome' => 'Google Chrome',
     'January' => 'Janeiro',
     'July' => 'Julho',
-    'June' => 'Junior',
+    'June' => 'Junho',
     'Konqueror' => 'Konqueror',
     'March' => 'Março',
     'Maxthon' => 'Maxthon',

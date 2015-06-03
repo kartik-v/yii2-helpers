@@ -855,7 +855,6 @@ class Enum extends \yii\helpers\Inflector
                 "msie" => Yii::t("kvenum", "Microsoft Internet Explorer"),
                 "konqueror" => Yii::t("kvenum", "Konqueror"),
                 "amaya" => Yii::t("kvenum", "Amaya"),
-                "omniweb" => Yii::t("kvenum", "Omniweb"),
                 "netscape" => Yii::t("kvenum", "Netscape"),
                 "mosaic" => Yii::t("kvenum", "Mosaic"),
                 "netsurf" => Yii::t("kvenum", "NetSurf"),

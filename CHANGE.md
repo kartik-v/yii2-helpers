@@ -1,11 +1,13 @@
 version 1.3.1
 =============
-**Date:** 24-Apr-2015
+**Date:** 15-Jun-2015
 
 - (enh #15): Initialize i18N for getBrowser method.
 - (enh #16): Add Russian translation messages.
 - (enh #17, #18): Update Russian translation messages.
 - (enh #19): Add Portuguese Brazilian translation messages.
+- (bug #21): Remove duplicate browsers in list.
+- (enh #22): Add Spanish translations.
 
 version 1.3.0
 =============

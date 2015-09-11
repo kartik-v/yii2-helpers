@@ -1,5 +1,14 @@
-version 1.3.1
-=============
+Change Log: `yii2-helpers`
+==========================
+
+## Version 1.3.2
+
+**Date:** 09-Sep-2015
+
+- (enh #24): New `timeInterval` method in addition to `timeElapsed`.
+
+## Version 1.3.1
+
 **Date:** 15-Jun-2015
 
 - (enh #15): Initialize i18N for getBrowser method.
@@ -9,8 +18,8 @@ version 1.3.1
 - (bug #21): Remove duplicate browsers in list.
 - (enh #22): Add Spanish translations.
 
-version 1.3.0
-=============
+## Version 1.3.0
+
 **Date:** 23-Jan-2015
 
 - (enh #7): Implement translations.
@@ -20,14 +29,14 @@ version 1.3.0
 - (enh #11): Add French Translations and fix `genCalList`.
 - (enh #12): Completed French Translations.
 
-version 1.2.0
-=============
+## Version 1.2.0
+
 **Date:** 10-Nov-2014
 
 - Set release to stable
 
-version 1.1.0
-=============
+## Version 1.1.0
+
 
 *Date:* 12-Aug-2014
 
@@ -35,8 +44,8 @@ version 1.1.0
 - updated documentation for newer methods
 - PSR4 alias change
 
-version 1.0.0
-=============
+## Version 1.0.0
+
 
 *Date:* 01-Mar-2014
 

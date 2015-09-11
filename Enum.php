@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2013 - 2015
  * @package yii2-helpers
- * @version 1.3.1
+ * @version 1.3.2
  */
 
 namespace kartik\helpers;
@@ -79,8 +79,8 @@ class Enum extends \yii\helpers\Inflector
      *     10 hours ago
      *
      * @param string  $fromTime start date time
-     * @param boolean $human if true returns an approximate human friendly output
-     * If set to false will attempt an exact conversion of time intervals.
+     * @param boolean $human if true returns an approximate human friendly output. If set to `false`,
+     * will attempt an exact conversion of time intervals.
      * @param string  $toTime end date time (defaults to current system time)
      * @param string  $append the string to append for the converted elapsed time. Defaults to ' ago'.
      *
@@ -88,48 +88,64 @@ class Enum extends \yii\helpers\Inflector
      */
     public static function timeElapsed($fromTime = null, $human = true, $toTime = null, $append = null)
     {
-        static::initI18N();
-        $elapsed = '';
         if ($fromTime != null) {
             $fromTime = strtotime($fromTime);
             $toTime = ($toTime == null) ? time() : (int)$toTime;
-            $diff = $toTime - $fromTime;
-            $intervals = static::$intervals;
+        }
+        return static::timeInterval($toTime - $fromTime, $append, $human);
+    }
 
-            if (empty($append)) {
-                $append = ' ' . Yii::t('kvenum', 'ago');
+    /**
+     * Get time interval (Facebook Style)
+     *
+     * Example Output(s):
+     *     10 hours ago
+     *
+     * @param int     $interval time interval in seconds
+     * @param string  $append the string to append for the converted elapsed time. Defaults to ' ago'.
+     * @param boolean $human if true returns an approximate human friendly output. If set to `false`,
+     * will attempt an exact conversion of time intervals.
+     *
+     * @return string
+     */    
+    public static function timeInterval($interval, $append = null, $human = true)
+    {
+        static::initI18N();
+        $intervals = static::$intervals;
+        $elapsed = '';
+
+        if ($append === null) {
+            $append = ' ' . Yii::t('kvenum', 'ago');
+        }
+        if ($human) {
+            if ($interval <= 0) {
+                $elapsed = Yii::t('kvenum', 'a moment') . $append;
+            } elseif ($interval < 60) {
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one second} other{# seconds}}',
+                        ['n' => $interval]) . $append;
+            } elseif ($interval >= 60 && $interval < $intervals['hour']) {
+                $interval = floor($interval / $intervals['minute']);
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one minute} other{# minutes}}',
+                        ['n' => $interval]) . $append;
+            } elseif ($interval >= $intervals['hour'] && $interval < $intervals['day']) {
+                $interval = floor($interval / $intervals['hour']);
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one hour} other{# hours}}', ['n' => $interval]) . $append;
+            } elseif ($interval >= $intervals['day'] && $interval < $intervals['week']) {
+                $interval = floor($interval / $intervals['day']);
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one day} other{# days}}', ['n' => $interval]) . $append;
+            } elseif ($interval >= $intervals['week'] && $interval < $intervals['month']) {
+                $interval = floor($interval / $intervals['week']);
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one week} other{# weeks}}', ['n' => $interval]) . $append;
+            } elseif ($interval >= $intervals['month'] && $interval < $intervals['year']) {
+                $interval = floor($interval / $intervals['month']);
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one month} other{# months}}',
+                        ['n' => $interval]) . $append;
+            } elseif ($interval >= $intervals['year']) {
+                $interval = floor($interval / $intervals['year']);
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one year} other{# years}}', ['n' => $interval]) . $append;
             }
-            if ($human) {
-                // now we just find the difference
-                if ($diff <= 0) {
-                    $elapsed = Yii::t('kvenum', 'a moment ago');
-                } elseif ($diff < 60) {
-                    $elapsed = Yii::t('kvenum', '{n, plural, one{one second} other{# seconds}}',
-                            ['n' => $diff]) . $append;
-                } elseif ($diff >= 60 && $diff < $intervals['hour']) {
-                    $diff = floor($diff / $intervals['minute']);
-                    $elapsed = Yii::t('kvenum', '{n, plural, one{one minute} other{# minutes}}',
-                            ['n' => $diff]) . $append;
-                } elseif ($diff >= $intervals['hour'] && $diff < $intervals['day']) {
-                    $diff = floor($diff / $intervals['hour']);
-                    $elapsed = Yii::t('kvenum', '{n, plural, one{one hour} other{# hours}}', ['n' => $diff]) . $append;
-                } elseif ($diff >= $intervals['day'] && $diff < $intervals['week']) {
-                    $diff = floor($diff / $intervals['day']);
-                    $elapsed = Yii::t('kvenum', '{n, plural, one{one day} other{# days}}', ['n' => $diff]) . $append;
-                } elseif ($diff >= $intervals['week'] && $diff < $intervals['month']) {
-                    $diff = floor($diff / $intervals['week']);
-                    $elapsed = Yii::t('kvenum', '{n, plural, one{one week} other{# weeks}}', ['n' => $diff]) . $append;
-                } elseif ($diff >= $intervals['month'] && $diff < $intervals['year']) {
-                    $diff = floor($diff / $intervals['month']);
-                    $elapsed = Yii::t('kvenum', '{n, plural, one{one month} other{# months}}',
-                            ['n' => $diff]) . $append;
-                } elseif ($diff >= $intervals['year']) {
-                    $diff = floor($diff / $intervals['year']);
-                    $elapsed = Yii::t('kvenum', '{n, plural, one{one year} other{# years}}', ['n' => $diff]) . $append;
-                }
-            } else {
-                $elapsed = static::time2String($diff, $intervals) . $append;
-            }
+        } else {
+            $elapsed = static::time2String($interval, $intervals) . $append;
         }
         return $elapsed;
     }

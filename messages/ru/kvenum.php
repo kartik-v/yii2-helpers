@@ -66,7 +66,7 @@ return [
     'Tuesday' => 'Вторник',
     'Wednesday' => 'Среда',
     'Yes' => 'Да',
-    'a moment ago' => 'минуту назад',
+    'a moment ago' => 'только что',
     'ago' => 'назад',
     'billion' => 'миллиардов',
     'eight' => 'восемь',

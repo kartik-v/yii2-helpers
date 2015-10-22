@@ -1,6 +1,17 @@
 Change Log: `yii2-helpers`
 ==========================
 
+## Version 1.3.3
+
+**Date:** 22-Oct-2015
+
+- (enh #25): Fix russian traslation for "a moment ago"
+- (enh #26): Add functionality for Bootstrap Checkbox Button Group and Radio Button Group. New additions:
+    - `checkboxButtonGroup`
+    - `radioButtonGroup`
+    - `activeCheckboxButtonGroup`
+    - `activeRadioButtonGroup`
+
 ## Version 1.3.2
 
 **Date:** 09-Sep-2015

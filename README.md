@@ -1,7 +1,7 @@
 yii2-helpers
 ============
 
-[![Latest Stable Version](https://poser.pugx.org/kartik-v/yii2-helpers/v/stable)](https://packagist.org/packages/kartik-v/yii2-helpers)
+[![Latest Stable Version](https://img.shields.io/packagist/v/kartik-v/yii2-helpers.svg)](https://packagist.org/packages/kartik-v/yii2-helpers)
 [![License](https://poser.pugx.org/kartik-v/yii2-helpers/license)](https://packagist.org/packages/kartik-v/yii2-helpers)
 [![Total Downloads](https://poser.pugx.org/kartik-v/yii2-helpers/downloads)](https://packagist.org/packages/kartik-v/yii2-helpers)
 [![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-helpers/d/monthly)](https://packagist.org/packages/kartik-v/yii2-helpers)
@@ -28,6 +28,8 @@ This class extends the [Yii Html Helper](https://github.com/yiisoft/yii2/blob/ma
 - Panel
 - Media
 - Media List
+- Checkbox Button Group
+- Radio Button Group
 
 ### Enum Class
 [```VIEW DEMO```](http://demos.krajee.com/helper-functions/enum)  

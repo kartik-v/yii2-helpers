@@ -806,107 +806,221 @@ class Html extends \yii\helpers\Html
         }
         return static::tag('address', "<strong>{$name}</strong><br>\n" . $addresses . $phones . $emails, $options);
     }
+    
+    /**
+     * Generates a bootstrap toggle button group (checkbox or radio type)
+     * 
+     * @param string $type whether checkbox or radio.
+     * @param string $name the name attribute of each checkbox.
+     * @param string|array $selection the selected value(s).
+     * @param array $items the data item used to generate the checkboxes/radios.
+     * The array keys are the checkbox/radio values, while the array values are the corresponding labels.
+     * @param array $options options (name => config) for the checkbox/radio list container tag.
+     * The following options are specially handled:
+     *
+     * - tag: string, the tag name of the container element.
+     * - unselect: string, the value that should be submitted when none of the checkboxes/radios is selected.
+     *   By setting this option, a hidden input will be generated.
+     * - encode: boolean, whether to HTML-encode the checkbox/radio labels. Defaults to true.
+     *   This option is ignored if `item` option is set.
+     * - separator: string, the HTML code that separates items.
+     * - itemOptions: array, the options for generating the checkbox/radio tag using [[checkbox/radio()]].
+     * - item: callable, a callback that can be used to customize the generation of the HTML code
+     *   corresponding to a single item in $items. The signature of this callback must be:
+     *
+     *   ~~~
+     *   function ($index, $label, $name, $checked, $value)
+     *   ~~~
+     *
+     *   where $index is the zero-based index of the checkbox/radio in the whole list; $label
+     *   is the label for the checkbox/radio; and $name, $value and $checked represent the name,
+     *   value and the checked status of the checkbox/radio input, respectively.
+     *
+     * See [[renderTagAttributes()]] for details on how attributes are being rendered.
+     *
+     * @return string the generated toggle button group
+     */
+    public static function getButtonGroup($type, $name, $selection = null, $items = [], $options = [])
+    {
+        $class = $type . 'List';
+        static::addCssClass($options, 'btn-group');
+        $options['data-toggle'] = 'buttons';
+        $options['inline'] = true;
+        if (!isset($options['itemOptions']['labelOptions']['class'])) {
+            $options['itemOptions']['labelOptions']['class'] = 'btn btn-default';
+        }
+        $options['item'] = function ($index, $label, $name, $checked, $value) use($type, $options) {
+            $opts = isset($options['itemOptions']) ? $options['itemOptions'] : [];
+            $encode = !isset($options['encode']) || $options['encode'];
+            if (!isset($opts['labelOptions'])) {
+                $opts['labelOptions'] = ArrayHelper::getValue($options, 'itemOptions.labelOptions', []);
+            }
+            if ($checked) {
+                Html::addCssClass($opts['labelOptions'], 'active');
+            }
+            return static::$type($name, $checked, array_merge($opts, [
+                'value' => $value,
+                'label' => $encode ? static::encode($label) : $label,
+            ]));
+        };
+        return static::$class($name, $selection, $items, $options);
+    }
+    
+    /**
+     * Generates a bootstrap checkbox button group. A checkbox button group allows multiple selection, 
+     * like [[listBox()]]. As a result, the corresponding submitted value is an array.
+     * 
+     * @param string $name the name attribute of each checkbox.
+     * @param string|array $selection the selected value(s).
+     * @param array $items the data item used to generate the checkboxes.
+     * The array keys are the checkbox values, while the array values are the corresponding labels.
+     * @param array $options options (name => config) for the checkbox list container tag.
+     * The following options are specially handled:
+     *
+     * - tag: string, the tag name of the container element.
+     * - unselect: string, the value that should be submitted when none of the checkboxes is selected.
+     *   By setting this option, a hidden input will be generated.
+     * - encode: boolean, whether to HTML-encode the checkbox labels. Defaults to true.
+     *   This option is ignored if `item` option is set.
+     * - separator: string, the HTML code that separates items.
+     * - itemOptions: array, the options for generating the checkbox tag using [[checkbox()]].
+     * - item: callable, a callback that can be used to customize the generation of the HTML code
+     *   corresponding to a single item in $items. The signature of this callback must be:
+     *
+     *   ~~~
+     *   function ($index, $label, $name, $checked, $value)
+     *   ~~~
+     *
+     *   where $index is the zero-based index of the checkbox in the whole list; $label
+     *   is the label for the checkbox; and $name, $value and $checked represent the name,
+     *   value and the checked status of the checkbox input, respectively.
+     *
+     * See [[renderTagAttributes()]] for details on how attributes are being rendered.
+     *
+     * @return string the generated checkbox button group
+     */    
+    public static function checkboxButtonGroup($name, $selection = null, $items = [], $options = [])
+    {
+        return static::getButtonGroup('checkbox', $name, $selection, $items, $options);
+    }
+    
+    /**
+     * Generates a bootstrap radio button group. A radio button group is like a checkbox button group, 
+     * except that it only allows single selection.
+     * 
+     * @param string $name the name attribute of each radio.
+     * @param string|array $selection the selected value(s).
+     * @param array $items the data item used to generate the radioes.
+     * The array keys are the radio values, while the array values are the corresponding labels.
+     * @param array $options options (name => config) for the radio list container tag.
+     * The following options are specially handled:
+     *
+     * - tag: string, the tag name of the container element.
+     * - unselect: string, the value that should be submitted when none of the radioes is selected.
+     *   By setting this option, a hidden input will be generated.
+     * - encode: boolean, whether to HTML-encode the radio labels. Defaults to true.
+     *   This option is ignored if `item` option is set.
+     * - separator: string, the HTML code that separates items.
+     * - itemOptions: array, the options for generating the radio tag using [[radio()]].
+     * - item: callable, a callback that can be used to customize the generation of the HTML code
+     *   corresponding to a single item in $items. The signature of this callback must be:
+     *
+     *   ~~~
+     *   function ($index, $label, $name, $checked, $value)
+     *   ~~~
+     *
+     *   where $index is the zero-based index of the radio in the whole list; $label
+     *   is the label for the radio; and $name, $value and $checked represent the name,
+     *   value and the checked status of the radio input, respectively.
+     *
+     * See [[renderTagAttributes()]] for details on how attributes are being rendered.
+     *
+     * @return string the generated radio button group
+     */ 
+    public static function radioButtonGroup($name, $selection = null, $items = [], $options = [])
+    {
+        return static::getButtonGroup('radio', $name, $selection, $items, $options);
+    }
 
     /**
-     * Returns the CSS Styles as key value pairs
-     * for the specified options
+     * Generates an active bootstrap checkbox button group. A checkbox button group allows multiple selection, 
+     * like [[listBox()]]. As a result, the corresponding submitted value is an array. The selection of the 
+     * checkbox button group is taken from the value of the model attribute.
+     * @param Model $model the model object
+     * @param string $attribute the attribute name or expression. See [[getAttributeName()]] for the format
+     * about attribute expression.
+     * @param array $items the data item used to generate the checkboxes.
+     * The array keys are the checkbox values, and the array values are the corresponding labels.
+     * Note that the labels will NOT be HTML-encoded, while the values will.
+     * @param array $options options (name => config) for the checkbox list container tag.
+     * The following options are specially handled:
      *
-     * @param array $options the HTML options
-     * @return array
+     * - tag: string, the tag name of the container element.
+     * - unselect: string, the value that should be submitted when none of the checkboxes is selected.
+     *   You may set this option to be null to prevent default value submission.
+     *   If this option is not set, an empty string will be submitted.
+     * - encode: boolean, whether to HTML-encode the checkbox labels. Defaults to true.
+     *   This option is ignored if `item` option is set.
+     * - separator: string, the HTML code that separates items.
+     * - itemOptions: array, the options for generating the checkbox tag using [[checkbox()]].
+     * - item: callable, a callback that can be used to customize the generation of the HTML code
+     *   corresponding to a single item in $items. The signature of this callback must be:
+     *
+     *   ~~~
+     *   function ($index, $label, $name, $checked, $value)
+     *   ~~~
+     *
+     *   where $index is the zero-based index of the checkbox in the whole list; $label
+     *   is the label for the checkbox; and $name, $value and $checked represent the name,
+     *   value and the checked status of the checkbox input.
+     *
+     * See [[renderTagAttributes()]] for details on how attributes are being rendered.
+     *
+     * @return string the generated bootstrap checkbox button group
      */
-    /** Commented since included in original Html Class
-     * public static function getCssStyles($options)
-     * {
-     * $styles = [];
-     * if (isset($options['style'])) {
-     * $pairs = explode(';', $options['style']);
-     * foreach ($pairs as $pair) {
-     * $setting = explode(':', $pair);
-     * if (count($setting) > 1) {
-     * $styles[trim($setting[0])] = trim($setting[1]);
-     * }
-     * }
-     * }
-     * return $styles;
-     * }
-     */
+    public static function activeCheckboxButtonGroup($model, $attribute, $items, $options = [])
+    {
+        return static::activeListInput('checkboxButtonGroup', $model, $attribute, $items, $options);
+    }
 
     /**
-     * Parses the CSS Styles passed as an array
-     * (as processed by [[getCssStyles]]) and
-     * returns a CSS Style string
+     * Generates an active bootstrap radio button group. A radio button group is like a checkbox button group, 
+     * except that it only allows single selection. The selection of the radio buttons is taken from the value 
+     * of the model attribute.
+     * @param Model $model the model object
+     * @param string $attribute the attribute name or expression. See [[getAttributeName()]] for the format
+     * about attribute expression.
+     * @param array $items the data item used to generate the radio buttons.
+     * The array keys are the radio values, and the array values are the corresponding labels.
+     * Note that the labels will NOT be HTML-encoded, while the values will.
+     * @param array $options options (name => config) for the radio button list container tag.
+     * The following options are specially handled:
      *
-     * @param array $styles the CSS styles array
-     * @return string
-     */
-    /** Commented since included in original Html Class
-     * public static function parseCssStyle($styles = [])
-     * {
-     * if (empty($styles)) {
-     * return '';
-     * }
-     * $style = '';
-     * foreach ($styles as $key => $val) {
-     * if ($style != '') {
-     * $style = "; {$key}: {$val}";
-     * }
-     * else {
-     * $style = "{$key}: {$val}";
-     * }
-     * }
-     * return $style;
-     * }
-     */
-
-    /**
-     * Adds inline CSS styles to the specified options.
-     * If the style is already in the options, it will not be added again.
+     * - tag: string, the tag name of the container element.
+     * - unselect: string, the value that should be submitted when none of the radio buttons is selected.
+     *   You may set this option to be null to prevent default value submission.
+     *   If this option is not set, an empty string will be submitted.
+     * - encode: boolean, whether to HTML-encode the checkbox labels. Defaults to true.
+     *   This option is ignored if `item` option is set.
+     * - separator: string, the HTML code that separates items.
+     * - itemOptions: array, the options for generating the radio button tag using [[radio()]].
+     * - item: callable, a callback that can be used to customize the generation of the HTML code
+     *   corresponding to a single item in $items. The signature of this callback must be:
      *
-     * @param array $options the options to be modified.
-     * @param string $style the CSS style setting to be added
-     * @param string $value the CSS style value for the setting
-     */
-    /** Commented since included in original Html Class
-     * public static function addCssStyle(&$options, $style, $value)
-     * {
-     * $styles = static::getCssStyles($options);
-     * if (empty($styles[$style])) {
-     * $styles[trim($style)] = $value;
-     * $options['style'] = static::parseCssStyle($styles);
-     * }
-     * }
-     */
-
-    /**
-     * Removes a CSS style from the specified options.
+     *   ~~~
+     *   function ($index, $label, $name, $checked, $value)
+     *   ~~~
      *
-     * @param array $options the options to be modified.
-     * @param string $style the CSS style setting to be removed
-     */
-    /** Commented since included in original Html Class
-     * public static function removeCssStyle(&$options, $style)
-     * {
-     * $styles = static::getCssStyles($options);
-     * unset($styles[trim($style)]);
-     * $options['style'] = static::parseCssStyle($styles);
-     * }
-     */
-
-    /**
-     * Setup inline CSS styles to the specified options.
-     * If the style is already in the options, it will be overwritten
-     * with new setting.
+     *   where $index is the zero-based index of the radio button in the whole list; $label
+     *   is the label for the radio button; and $name, $value and $checked represent the name,
+     *   value and the checked status of the radio button input.
      *
-     * @param array $options the options to be modified.
-     * @param string $style the CSS style setting to be added
-     * @param string $value the CSS style value for the setting
+     * See [[renderTagAttributes()]] for details on how attributes are being rendered.
+     *
+     * @return string the generated bootstrap radio button group
      */
-    /** Commented since included in original Html Class
-     * public static function setCssStyle(&$options, $style, $value)
-     * {
-     * $styles = static::getCssStyles($options);
-     * $styles[trim($style)] = $value;
-     * $options['style'] = static::parseCssStyle($styles);
-     * }
-     */
+    public static function activeRadioButtonGroup($model, $attribute, $items, $options = [])
+    {
+        return static::activeListInput('radioButtonGroup', $model, $attribute, $items, $options);
+    }
 }

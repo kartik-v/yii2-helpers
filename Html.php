@@ -381,7 +381,7 @@ class Html extends \yii\helpers\Html
     protected static function getPanelContent($content, $type)
     {
         $out = ArrayHelper::getValue($content, $type, '');
-        return Enum::isEmpty($out) ? $out . "\n" : '';
+        return !Enum::isEmpty($out) ? $out . "\n" : '';
     }
 
     /**
@@ -394,7 +394,7 @@ class Html extends \yii\helpers\Html
      */
     protected static function getPanelTitle($content, $type)
     {
-        if (!Enum::isEmpty($content[$type])) {
+        if (isset($content[$type]) && !Enum::isEmpty($content[$type])) {
             $title = $content[$type];
             if (ArrayHelper::getValue($content, "{$type}Title", true) === true) {
                 $title = static::tag("h3", $title, ["class" => "panel-title"]);

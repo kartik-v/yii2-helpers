@@ -95,6 +95,10 @@ class Enum extends Inflector
      */
     public static function timeElapsed($fromTime = null, $human = true, $toTime = null, $append = null)
     {
+        static::initI18N();
+        if ($append === null) {
+            $append = ' ' . Yii::t('kvenum', 'ago');
+        }
         if ($fromTime != null) {
             $fromTime = strtotime($fromTime);
             $toTime = ($toTime == null) ? time() : (int)$toTime;
@@ -128,34 +132,30 @@ class Enum extends Inflector
             if ($interval <= 0) {
                 $elapsed = Yii::t('kvenum', 'a moment ago');
             } elseif ($interval < 60) {
-                $elapsed = Yii::t('kvenum', '{n, plural, one{one second} other{# seconds}}', [
-                        'n' => $interval
-                    ]) . $append;
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one second} other{# seconds}}', [ 'n' => $interval]);
             } elseif ($interval >= 60 && $interval < $intervals['hour']) {
                 $interval = floor($interval / $intervals['minute']);
-                $elapsed = Yii::t('kvenum', '{n, plural, one{one minute} other{# minutes}}', ['n' => $interval]) .
-                    $append;
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one minute} other{# minutes}}', ['n' => $interval]);
             } elseif ($interval >= $intervals['hour'] && $interval < $intervals['day']) {
                 $interval = floor($interval / $intervals['hour']);
-                $elapsed = Yii::t('kvenum', '{n, plural, one{one hour} other{# hours}}', ['n' => $interval]) . $append;
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one hour} other{# hours}}', ['n' => $interval]);
             } elseif ($interval >= $intervals['day'] && $interval < $intervals['week']) {
                 $interval = floor($interval / $intervals['day']);
-                $elapsed = Yii::t('kvenum', '{n, plural, one{one day} other{# days}}', ['n' => $interval]) . $append;
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one day} other{# days}}', ['n' => $interval]);
             } elseif ($interval >= $intervals['week'] && $interval < $intervals['month']) {
                 $interval = floor($interval / $intervals['week']);
-                $elapsed = Yii::t('kvenum', '{n, plural, one{one week} other{# weeks}}', ['n' => $interval]) . $append;
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one week} other{# weeks}}', ['n' => $interval]);
             } elseif ($interval >= $intervals['month'] && $interval < $intervals['year']) {
                 $interval = floor($interval / $intervals['month']);
-                $elapsed = Yii::t('kvenum', '{n, plural, one{one month} other{# months}}', ['n' => $interval]) .
-                    $append;
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one month} other{# months}}', ['n' => $interval]);
             } elseif ($interval >= $intervals['year']) {
                 $interval = floor($interval / $intervals['year']);
-                $elapsed = Yii::t('kvenum', '{n, plural, one{one year} other{# years}}', ['n' => $interval]) . $append;
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one year} other{# years}}', ['n' => $interval]);
             }
         } else {
-            $elapsed = static::time2String($interval, $intervals) . $append;
+            $elapsed = static::time2String($interval, $intervals);
         }
-        return $elapsed;
+        return $elapsed . $append;
     }
 
     /**
@@ -199,68 +199,7 @@ class Enum extends Inflector
     }
 
     /**
-     * Get time remaining (Facebook Style)
-     *
-     * Example Output(s):
-     *     10 hours to go
-     *
-     * @param string  $futureTime future date time
-     * @param boolean $human if true returns an approximate human friendly output
-     * If set to false will attempt an exact conversion of time intervals.
-     * @param string  $currentTime current date time (defaults to current system time)
-     * @param string  $append the string to append for the converted elapsed time
-     * (default: 'until the deadline')
-     *
-     * @return string
-     */
-    public static function timeRemaining(
-        $futureTime = null,
-        $human = true,
-        $currentTime = null,
-        $append = ' until the deadline'
-    ) {
-        $remaining = '';
-        if ($futureTime != null) {
-            $futureTime = strtotime($futureTime);
-            $currentTime = ($currentTime == null) ? time() : (int)$currentTime;
-            $diff = $futureTime - $currentTime;
-            $intervals = static::$intervals;
-
-            if ($human) {
-                // now we just find the difference
-                if ($diff <= 0) {
-                    $remaining = 'a moment to go';
-                } elseif ($diff < 60) {
-                    $remaining = $diff == 1 ? $diff . ' second to go' : $diff . ' seconds' . $append;
-                } elseif ($diff >= 60 && $diff < $intervals['hour']) {
-                    $diff = floor($diff / $intervals['minute']);
-                    $remaining = $diff == 1 ? $diff . ' minute to go' : $diff . ' minutes' . $append;
-                } elseif ($diff >= $intervals['hour'] && $diff < $intervals['day']) {
-                    $diff = floor($diff / $intervals['hour']);
-                    $remaining = $diff == 1 ? $diff . ' hour to go' : $diff . ' hours' . $append;
-                } elseif ($diff >= $intervals['day'] && $diff < $intervals['week']) {
-                    $diff = floor($diff / $intervals['day']);
-                    $remaining = $diff == 1 ? $diff . ' day to go' : $diff . ' days' . $append;
-                } elseif ($diff >= $intervals['week'] && $diff < $intervals['month']) {
-                    $diff = floor($diff / $intervals['week']);
-                    $remaining = $diff == 1 ? $diff . ' week to go' : $diff . ' weeks to go';
-                } elseif ($diff >= $intervals['month'] && $diff < $intervals['year']) {
-                    $diff = floor($diff / $intervals['month']);
-                    $remaining = $diff == 1 ? $diff . ' month to go' : $diff . ' months' . $append;
-                } elseif ($diff >= $intervals['year']) {
-                    $diff = floor($diff / $intervals['year']);
-                    $remaining = $diff == 1 ? $diff . ' year to go' : $diff . ' years' . $append;
-                }
-            } else {
-                $remaining = static::time2String($diff, $intervals) . $append;
-            }
-        }
-        return $remaining;
-    }
-
-    /**
-     * Format and convert "bytes" to its
-     * optimal higher metric unit
+     * Format and convert "bytes" to its optimal higher metric unit
      *
      * @param double  $bytes number of bytes
      * @param integer $precision the number of decimal places to round off
@@ -281,8 +220,7 @@ class Enum extends Inflector
     }
 
     /**
-     * Number to words conversion. Returns the number
-     * converted as an anglicized string.
+     * Number to words conversion. Returns the number converted as an anglicized string.
      *
      * @param double $num the source number
      *
@@ -291,15 +229,12 @@ class Enum extends Inflector
     public static function numToWords($num)
     {
         $num = (int)$num; // make sure it's an integer
-
         if ($num < 0) {
             return Yii::t('kvenum', 'minus') . ' ' . static::convertTri(-$num, 0);
         }
-
         if ($num == 0) {
             return Yii::t('kvenum', 'zero');
         }
-
         return static::convertTri($num, 0);
     }
 
@@ -313,10 +248,10 @@ class Enum extends Inflector
      */
     protected static function convertTri($num, $tri)
     {
-        // chunk the number, ...rxyy
-        $r = (int)($num / 1000);
-        $x = ($num / 100) % 10;
-        $y = $num % 100;
+        // chunk the number ...xyz
+        $x = (int)($num / 1000);
+        $y = ($num / 100) % 10;
+        $z = $num % 100;
 
         // init the output string
         $str = "";
@@ -325,28 +260,20 @@ class Enum extends Inflector
         $triplets = static::triplets();
 
         // do hundreds
-        if ($x > 0) {
-            $str = $ones[$x] . ' ' . Yii::t('kvenum', 'hundred');
+        if ($y > 0) {
+            $str = $ones[$y] . ' ' . Yii::t('kvenum', 'hundred');
         }
 
         // do ones and tens
-        if ($y < 20) {
-            $str .= $ones[$y];
-        } else {
-            $str .= $tens[(int)($y / 10)] . $ones[$y % 10];
-        }
+        $str .= $z < 20 ? $ones[$z] : $tens[(int)($z / 10)] . $ones[$z % 10];
 
         // add triplet modifier only if there is some output to be modified...
         if ($str != "") {
             $str .= $triplets[$tri];
         }
 
-        // continue recursing?
-        if ($r > 0) {
-            return static::convertTri($r, $tri + 1) . $str;
-        } else {
-            return $str;
-        }
+        // recursively process until valid thousands digit found
+        return $x > 0 ? static::convertTri($x, $tri + 1) . $str : $str;
     }
 
     /**

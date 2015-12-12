@@ -167,7 +167,7 @@ class Enum extends Inflector
             return;
         }
         Yii::setAlias("@kvenum", __DIR__);
-        Yii::$app->i18n->translations['kvenum'] = [
+        Yii::$app->i18n->translations['kvenum*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'basePath' => "@kvenum/messages",
             'forceTranslation' => true
@@ -665,16 +665,16 @@ class Enum extends Inflector
     /**
      * Convert a PHP array to HTML table
      *
-     * @param array   $array the associative array to be converted
-     * @param boolean $transpose whether to show keys as rows instead of columns.
-     * This parameter should be used only for a single dimensional associative array.
-     * If used for a multidimensional array, the sub array will be imploded as text.
-     * @param boolean $recursive whether to recursively generate tables for multi-dimensional arrays
-     * @param boolean $typeHint whether to show the data type as a hint
-     * @param string  $null the content to display for blank cells
-     * @param array   $tableOptions the HTML attributes for the table
-     * @param array   $keyOptions the HTML attributes for the array key
-     * @param array   $valueOptions the HTML attributes for the array value
+     * @param array  $array the associative array to be converted
+     * @param bool   $transpose whether to show keys as rows instead of columns. This parameter should be used only for
+     *     a single dimensional associative array. If used for a multidimensional array, the sub array will be imploded
+     *     as text.
+     * @param bool   $recursive whether to recursively generate tables for multi-dimensional arrays
+     * @param bool   $typeHint whether to show the data type as a hint
+     * @param string $null the content to display for blank cells
+     * @param array  $tableOptions the HTML attributes for the table
+     * @param array  $keyOptions the HTML attributes for the array key
+     * @param array  $valueOptions the HTML attributes for the array value
      *
      * @return string|boolean
      */

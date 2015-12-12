@@ -1,6 +1,13 @@
 Change Log: `yii2-helpers`
 ==========================
 
+## Version 1.3.5
+
+**Date:** 13-Dec-2015
+
+- (bug #31): Correct empty validation check .
+- (enh #32): Enhancements to media, list group, and panel.
+
 ## Version 1.3.4
 
 **Date:** 12-Dec-2015

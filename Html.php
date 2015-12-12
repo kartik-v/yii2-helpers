@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2013 - 2015
  * @package yii2-helpers
- * @version 1.3.2
+ * @version 1.3.5
  */
 
 namespace kartik\helpers;
@@ -130,13 +130,17 @@ class Html extends \yii\helpers\Html
      * @see http://getbootstrap.com/components/#list-group
      *
      * @param array  $items the list group items. The following array key properties can be setup:
-     * - $content: mixed, the list item content. When passed as a string, it will display this directly as a raw
-     *     content. When passed as an array, it requires these keys
-     *      - `heading`: string, the content heading
-     *      - `body`: string, the content body
-     *      - `url`: mixed, the url for linking the list item content (optional)
+     *      - `content`: mixed, the list item content. When passed as a string, it will display this directly as a raw
+     *          content. When passed as an array, it requires these keys
+     *          - `heading`: string, the content heading (optional).
+     *          - `headingOptions`: array, the HTML attributes / options for heading container (optional).
+     *          - `body`: string, the content body (optional).
+     *          - `bodyOptions`: array, the HTML attributes / options for body container (optional).
+     *      - `url`: , the url for linking the list item content (optional).
      *      - `badge`: string, any badge content to be displayed for this list item (optional)
+     *      - `badgeOptions`: array, the HTML attributes / options for badge container (optional).
      *      - `active`: bool, to highlight the item as active (applicable only if $url is passed). Defaults to `false`.
+     *      - `options`: array, HTML attributes / options for the list group item container (optional).
      * @param array  $options HTML attributes / options for the list group container
      * @param string $tag the list group container tag. Defaults to 'div'.
      * @param string $itemTag the list item container tag. Defaults to 'div'.
@@ -189,7 +193,7 @@ class Html extends \yii\helpers\Html
         static::addCssClass($options, 'list-group');
         $content = '';
         foreach ($items as $item) {
-            $content .= static::generateListGroupItem($item, $itemTag) . "\n";
+            $content .= static::getListGroupItem($item, $itemTag) . "\n";
         }
         return static::tag($tag, $content, $options);
     }
@@ -197,38 +201,50 @@ class Html extends \yii\helpers\Html
     /**
      * Processes and generates each list group item
      *
-     * @param array  $item the list item configuration
-     * @param string $tag the list item container tag
+     * @param array  $item the list item configuration.  The following array key properties can be setup:
+     *      - `content`: mixed, the list item content. When passed as a string, it will display this directly as a raw
+     *          content. When passed as an array, it requires these keys
+     *          - `heading`: string, the content heading (optional).
+     *          - `body`: string, the content body (optional).
+     *          - `headingOptions`: array, the HTML attributes / options for heading container (optional).
+     *          - `bodyOptions`: array, the HTML attributes / options for body container (optional).
+     *      - `url`: string|array, the url for linking the list item content (optional).
+     *      - `badge`: string, any badge content to be displayed for this list item (optional)
+     *      - `badgeOptions`: array, the HTML attributes / options for badge container (optional).
+     *      - `active`: bool, to highlight the item as active (applicable only if $url is passed). Defaults to `false`.
+     *      - `options`: array, HTML attributes / options for the list group item container (optional).
+     * @param string $tag the list item container tag (applied if it is not a link)
      *
      * @return string
      */
-    protected static function generateListGroupItem($item, $tag)
+    protected static function getListGroupItem($item, $tag)
     {
         static::addCssClass($item['options'], 'list-group-item');
-        $content = isset($item['content']) ? $item['content'] : '';
+        $heading = $body = $badge = $content = $url = $active = '';
+        $options = $headingOptions = $bodyOptions = $badgeOptions = [];
+        extract($item);
         if (is_array($content)) {
-            $heading = ArrayHelper::getValue($content, 'heading', '');
-            $body = ArrayHelper::getValue($content, 'body', '');
+            extract($content);
             if (!Enum::isEmpty($heading)) {
-                $heading = static::tag('h4', $heading, ['class' => 'list-group-item-heading']);
+                static::addCssClass($headingOptions, 'list-group-item-heading');
+                $heading = static::tag('h4', $heading, $headingOptions);
             }
             if (!Enum::isEmpty($body)) {
-                $body = static::tag('p', $body, ['class' => 'list-group-item-text']);
+                static::addCssClass($bodyOptions, 'list-group-item-text');
+                $body = static::tag('p', $body, $bodyOptions);
             }
             $content = $heading . "\n" . $body;
         }
-        $badge = ArrayHelper::getValue($item, 'badge', '');
-        $url = ArrayHelper::getValue($item, 'url', '');
         if (!Enum::isEmpty($badge)) {
-            $content = static::badge($badge) . $content;
+            $content = static::badge($badge, $badgeOptions) . $content;
         }
         if (!Enum::isEmpty($url)) {
-            if (ArrayHelper::getValue($item, 'active', false)) {
-                static::addCssClass($item['options'], 'active');
+            if ($active) {
+                static::addCssClass($options, 'active');
             }
-            return static::a($content, $url, $item['options']);
+            return static::a($content, $url, $options);
         } else {
-            return static::tag($tag, $content, $item['options']);
+            return static::tag($tag, $content, $options);
         }
     }
 
@@ -394,8 +410,8 @@ class Html extends \yii\helpers\Html
      */
     protected static function getPanelTitle($content, $type)
     {
-        if (isset($content[$type]) && !Enum::isEmpty($content[$type])) {
-            $title = $content[$type];
+        $title = ArrayHelper::getValue($content, $type, '');
+        if (!Enum::isEmpty($title)) {
             if (ArrayHelper::getValue($content, "{$type}Title", true) === true) {
                 $title = static::tag("h3", $title, ["class" => "panel-title"]);
             }
@@ -471,6 +487,8 @@ class Html extends \yii\helpers\Html
      * @param mixed  $img URL for the media image source.
      * @param array  $srcOptions html options for the media article link.
      * @param array  $imgOptions html options for the media image.
+     * @param array  $headingOptions HTML attributes / options for the media object heading container.
+     * @param array  $bodyOptions HTML attributes / options for the media object body container.
      * @param array  $options HTML attributes / options for the media object container.
      * @param string $tag the media container tag. Defaults to 'div'.
      *
@@ -493,21 +511,21 @@ class Html extends \yii\helpers\Html
         $img = '',
         $srcOptions = [],
         $imgOptions = [],
+        $headingOptions = [],
+        $bodyOptions = [],
         $options = [],
         $tag = 'div'
     ) {
         static::addCssClass($options, 'media');
-
         if (!isset($srcOptions['class'])) {
             static::addCssClass($srcOptions, 'pull-left');
         }
-
         static::addCssClass($imgOptions, 'media-object');
-
+        static::addCssClass($headingOptions, 'media-heading');
+        static::addCssClass($bodyOptions, 'media-body');
         $source = static::a(static::img($img, $imgOptions), $src, $srcOptions);
-        $heading = !Enum::isEmpty($heading) ? static::tag('h4', $heading, ['class' => 'media-heading']) : '';
-        $content = !Enum::isEmpty($body) ? static::tag('div', $heading . "\n" . $body, ['class' => 'media-body']) :
-            $heading;
+        $heading = !Enum::isEmpty($heading) ? static::tag('h4', $heading, $headingOptions) : '';
+        $content = !Enum::isEmpty($body) ? static::tag('div', $heading . "\n" . $body, $bodyOptions) : $heading;
         return static::tag($tag, $source . "\n" . $content, $options);
     }
 
@@ -524,7 +542,9 @@ class Html extends \yii\helpers\Html
      *  - `img`: mixed, URL for the media image source
      *  - `srcOptions`: array, HTML attributes / options for the media article link (optional)
      *  - `imgOptions`: array, HTML attributes / options for the media image (optional)
-     *  - `itemOptions`: array, HTML attributes / options for each media item (optional)
+     *  - `headingOptions`: array, HTML attributes / options for the media heading (optional)
+     *  - `bodyOptions`: array, HTML attributes / options for the media body (optional)
+     *  - `options`: array, HTML attributes / options for each media item (optional)
      * @param array $options HTML attributes / options for the media list container
      *
      * Example(s):
@@ -572,7 +592,7 @@ class Html extends \yii\helpers\Html
     public static function mediaList($items = [], $options = [])
     {
         static::addCssClass($options, 'media-list');
-        $content = static::generateMediaList($items);
+        $content = static::getMediaList($items);
         return static::tag('ul', $content, $options);
     }
 
@@ -584,15 +604,15 @@ class Html extends \yii\helpers\Html
      *
      * @return string
      */
-    protected static function generateMediaList($items, $top = true)
+    protected static function getMediaList($items, $top = true)
     {
         $content = '';
         foreach ($items as $item) {
-            $tag = ($top) ? 'li' : 'div';
+            $tag = $top ? 'li' : 'div';
             if (isset($item['items'])) {
-                $item['body'] .= static::generateMediaList($item['items'], false);
+                $item['body'] .= static::getMediaList($item['items'], false);
             }
-            $content .= static::generateMediaItem($item, $tag) . "\n";
+            $content .= static::getMediaItem($item, $tag) . "\n";
         }
         return $content;
     }
@@ -605,16 +625,24 @@ class Html extends \yii\helpers\Html
      *
      * @return string
      */
-    protected static function generateMediaItem($item, $tag)
+    protected static function getMediaItem($item = [], $tag = 'div')
     {
-        $heading = isset($item['heading']) ? $item['heading'] : '';
-        $body = isset($item['body']) ? $item['body'] : '';
-        $src = isset($item['src']) ? $item['src'] : '#';
-        $img = isset($item['img']) ? $item['img'] : '';
-        $srcOptions = isset($item['srcOptions']) ? $item['srcOptions'] : [];
-        $imgOptions = isset($item['imgOptions']) ? $item['imgOptions'] : [];
-        $itemOptions = isset($item['itemOptions']) ? $item['itemOptions'] : [];
-        return static::media($heading, $body, $src, $img, $srcOptions, $imgOptions, $itemOptions, $tag);
+        $heading = $body = $img = '';
+        $src = '#';
+        $srcOptions = $imgOptions = $options = $headingOptions = $bodyOptions = [];
+        extract($item);
+        return static::media(
+            $heading,
+            $body,
+            $src,
+            $img,
+            $srcOptions,
+            $imgOptions,
+            $headingOptions,
+            $bodyOptions,
+            $options,
+            $tag
+        );
     }
 
     /**

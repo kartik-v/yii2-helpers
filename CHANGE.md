@@ -13,6 +13,7 @@ Change Log: `yii2-helpers`
 - Update message config to include all default standard translation files.
 - Add github contribution and issue/PR logging templates.
 - Add branch alias for dev-master latest release.
+- Update PHP documentation for all classes in the extension.
 
 ## Version 1.3.4
 

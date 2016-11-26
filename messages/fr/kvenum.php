@@ -17,6 +17,17 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Android' => '',
+    'Linux' => '',
+    'Macintosh OSX' => '',
+    'Maemo' => '',
+    'Other' => '',
+    'Palm' => '',
+    'Symbian' => '',
+    'Unix' => '',
+    'Unknown' => '',
+    'Windows' => '',
+    'iOS' => '',
     'Amaya' => 'Amaya',
     'Apple Safari' => 'Apple Safari',
     'April' => 'Avril',

@@ -17,6 +17,18 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Android' => '',
+    'Linux' => '',
+    'Macintosh OSX' => '',
+    'Maemo' => '',
+    'Other' => '',
+    'Palm' => '',
+    'Symbian' => '',
+    'Unix' => '',
+    'Unknown' => '',
+    'Windows' => '',
+    'iOS' => '',
+    'nonillion' => '',
     'Amaya' => 'Amaya',
     'Apple Safari' => 'Apple Safari',
     'April' => 'Aprile',
@@ -85,7 +97,6 @@ return [
     'nine' => 'nove',
     'nineteen' => 'diciannove',
     'ninety' => 'novanta',
-    'nonillion' => '',
     'octillion' => 'ottilione',
     'one' => 'uno',
     'quadrillion' => 'qudrilione',

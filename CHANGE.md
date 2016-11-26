@@ -1,12 +1,18 @@
 Change Log: `yii2-helpers`
 ==========================
 
-## Version 1.3.5
+## Version 1.3.6
 
-**Date:** 13-Dec-2015
+**Date:** 26-Nov-2016
 
-- (bug #31): Correct empty validation check .
-- (enh #32): Enhancements to media, list group, and panel.
+- (enh #33): Update Italian Translations.
+- (enh #35): Add Slovak Translations.
+- (enh #36): Update Russian Translations.
+- (enh #37): Update Finnish Translations.
+- (bug #38): Fix buttonGroup `item` parsing when set as Closure.
+- Update message config to include all default standard translation files.
+- Add github contribution and issue/PR logging templates.
+- Add branch alias for dev-master latest release.
 
 ## Version 1.3.4
 

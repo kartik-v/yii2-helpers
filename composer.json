@@ -20,5 +20,10 @@
         "psr-4": {
             "kartik\\helpers\\": ""
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.3.x-dev"
+        }
     }
 }

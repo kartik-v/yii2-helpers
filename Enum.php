@@ -177,7 +177,7 @@ class Enum extends Inflector
         }
         if ($human) {
             if ($interval <= 0) {
-                $elapsed = Yii::t('kvenum', 'a moment ago');
+                $elapsed = Yii::t('kvenum', 'a moment');
             } elseif ($interval < 60) {
                 $elapsed = Yii::t('kvenum', '{n, plural, one{one second} other{# seconds}}', [ 'n' => $interval]);
             } elseif ($interval >= 60 && $interval < $intervals['hour']) {

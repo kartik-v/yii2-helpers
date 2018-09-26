@@ -1,18 +1,21 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2013 - 2016
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2013 - 2018
  * @package yii2-helpers
- * @version 1.3.6
+ * @version 1.3.7
  */
 
 namespace kartik\helpers;
 
 use Closure;
+use kartik\base\Widget;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html as YiiHtml;
+use yii\widgets\ActiveField;
 
 /**
  * Html provides a set of static methods for generating commonly used HTML tags and extends [[YiiHtml]]
@@ -115,6 +118,21 @@ class Html extends YiiHtml
     const TYPE_SUCCESS = 'success';
 
     /**
+     * Check if HTML options has specified CSS class
+     * @param array $options the HTML options
+     * @param string $cssClass the css class to test
+     * @return bool
+     */
+    protected static function hasCssClass($options, $cssClass)
+    {
+        if (!isset($options['class'])) {
+            return false;
+        }
+        $classes = preg_split('/\s+/', $options['class'], -1, PREG_SPLIT_NO_EMPTY);
+        return in_array($cssClass, $classes);
+    }
+
+    /**
      * Generates a bootstrap icon markup.
      *
      * Example:
@@ -158,18 +176,24 @@ class Html extends YiiHtml
      * @param string $type the bootstrap label type. Defaults to 'default'. Should be one of the bootstrap contextual
      * colors: 'default, 'primary', 'success', 'info', 'danger', 'warning'.
      * @param array $options HTML attributes / options for the label container
-     * @param string $prefix the CSS class prefix. Defaults to 'label label-'.
      * @param string $tag the label container tag. Defaults to 'span'.
+     * @param string $prefix the CSS class prefix. Defaults to null and will be auto parsed based on BS Version.
      *
      * @return string
+     * @throws InvalidConfigException
      */
-    public static function bsLabel($content, $type = 'default', $options = [], $prefix = 'label label-', $tag = 'span')
+    public static function bsLabel($content, $type = 'default', $options = [], $tag = 'span', $prefix = null)
     {
+        $widget = new Widget();
         if (Enum::isEmpty($type)) {
             $type = self::TYPE_DEFAULT;
         }
-        $class = isset($options['class']) ? ' ' . $options['class'] : '';
-        $options['class'] = $prefix . $type . $class;
+        if (isset($prefix)) {
+            static::addCssClass($options, $prefix . $type);
+        } else {
+            $widget->addCssClass($options, Widget::BS_LABEL);
+            $widget->addCssClass($options, "label-{$type}");
+        }
         return static::tag($tag, $content, $options);
     }
 
@@ -190,10 +214,12 @@ class Html extends YiiHtml
      * @param string $tag the label container tag. Defaults to 'span'.
      *
      * @return string
+     * @throws InvalidConfigException
      */
     public static function badge($content, $options = [], $tag = 'span')
     {
-        static::addCssClass($options, 'badge');
+        $widget = new Widget();
+        $widget->addCssClass($options, Widget::BS_BADGE);
         return static::tag($tag, $content, $options);
     }
 
@@ -256,20 +282,29 @@ class Html extends YiiHtml
      * - `badge`: _string_, any badge content to be displayed for this list item (optional)
      * - `badgeOptions`: _array_, the HTML attributes / options for badge container (optional).
      * - `active`: _boolean_, to highlight the item as active (applicable only if $url is passed). Defaults to `false`.
-     * - `options`: _array_, HTML attributes / options for the list group item container (optional).
-     * @param array $options HTML attributes / options for the list group container
-     * @param string $tag the list group container tag. Defaults to 'div'.
-     * @param string $itemTag the list item container tag. Defaults to 'div'.
+     * - `options`: _array_, HTML attributes / options for the list group item container (optional). The following
+     *    special option is recognized:
+     *    - `tag`: _string_, the list group container tag. Defaults to 'div'.
+     * @param array $options HTML attributes for the list group container. The following special option is recognized:
+     * - `tag`: _string_, the list group container tag. Defaults to 'div'.
+     * @param array $itemOptions HTML attributes for the list group item options (will be overridden by `options` at
+     *   the item level). The following special option is recognized:
+     * - `tag`: _string_, the list group container tag. Defaults to 'div'.
+     * @param array $badgeOptions HTML attributes for the list group item badge options (will be overridden by
+     * `badgeOptions` at the item level)
      *
      * @return string
+     * @return string
+     * @throws  InvalidConfigException
      */
-    public static function listGroup($items = [], $options = [], $tag = 'div', $itemTag = 'div')
+    public static function listGroup($items = [], $options = [], $itemOptions = [], $badgeOptions = [])
     {
         static::addCssClass($options, 'list-group');
         $content = '';
         foreach ($items as $item) {
-            $content .= static::getListGroupItem($item, $itemTag) . "\n";
+            $content .= static::getListGroupItem($item, $itemOptions, $badgeOptions) . "\n";
         }
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
         return static::tag($tag, $content, $options);
     }
 
@@ -402,19 +437,26 @@ class Html extends YiiHtml
      * @param string $prefix the CSS prefix for panel type. Defaults to `panel panel-`.
      *
      * @return string
+     * @throws InvalidConfigException
      */
-    public static function panel($content = [], $type = 'default', $options = [], $prefix = 'panel panel-')
+    public static function panel($content = [], $type = 'default', $options = [], $prefix = null)
     {
         if (!is_array($content)) {
             return '';
         } else {
-            static::addCssClass($options, $prefix . $type);
+            $widget = new Widget();
+            if (isset($prefix)) {
+                static::addCssClass($options, $prefix . $type);
+            } else {
+                $widget->addCssClass($options, Widget::BS_PANEL);
+                $widget->addCssClass($options, "panel-{$type}");
+            }
             $panel = static::getPanelContent($content, 'preHeading') .
-                static::getPanelTitle($content, 'heading') .
+                static::getPanelTitle($content, 'heading', $widget) .
                 static::getPanelContent($content, 'preBody') .
                 static::getPanelContent($content, 'body') .
                 static::getPanelContent($content, 'postBody') .
-                static::getPanelTitle($content, 'footer') .
+                static::getPanelTitle($content, 'footer', $widget) .
                 static::getPanelContent($content, 'postFooter');
             return static::tag('div', $panel, $options);
         }
@@ -458,19 +500,25 @@ class Html extends YiiHtml
      *
      * @param string $content the content
      * @param string $size the well size. Should be one of the bootstrap size modifiers:
-     * - [[SIZE_TINY]] or `xs`
      * - [[SIZE_SMALL]] or `sm`
-     * - [[SIZE_MEDIUM]] or `md`
      * - [[SIZE_LARGE]] or `lg`
      * @param array $options HTML attributes / options for the well container.
      *
      * @return string
+     * @throws InvalidConfigException
      */
     public static function well($content, $size = '', $options = [])
     {
-        static::addCssClass($options, 'well');
+        $widget = new Widget();
         if (!Enum::isEmpty($size)) {
-            static::addCssClass($options, 'well-' . $size);
+            if ($size === self::SIZE_SMALL) {
+                $widget->addCssClass($options, Widget::BS_WELL_SM);
+            }
+            if ($size === self::SIZE_LARGE) {
+                $widget->addCssClass($options, Widget::BS_WELL_LG);
+            }
+        } else {
+            $widget->addCssClass($options, Widget::BS_WELL);
         }
         return static::tag('div', $content, $options);
     }
@@ -714,16 +762,42 @@ class Html extends YiiHtml
      * '{source}' to embed the cite source
      * @param string $citeTitle the cite source title (optional)
      * @param string $citeSource the cite source (optional)
-     * @param array $options html options for the blockquote
-     *
+     * @param array $options HTML attributes for the blockquote main container
+     * @param array $contentOptions HTML attributes for the blockquote content container. For Bootstrap 4.x, the CSS
+     * class `mb-0` will be set if the class attribute is not set. The following option is specially recognized:
+     *  - `tag`: _string_, the tag to render the content. Defaults to `p`.
+     * @param array $footerOptions HTML attributes for the blockquote footer container. Applicable only for Bootstrap
+     * 4.x releases.
      * @return string
+     * @throws InvalidConfigException
      */
-    public static function blockquote($content, $citeContent = '', $citeTitle = '', $citeSource = '', $options = [])
-    {
-        $content = static::tag('p', $content);
+    public static function blockquote(
+        $content,
+        $citeContent = '',
+        $citeTitle = '',
+        $citeSource = '',
+        $options = [],
+        $contentOptions = [],
+        $footerOptions = []
+    ) {
+        $widget = new Widget();
+        $isBs4 = $widget->isBs4();
+        if ($isBs4) {
+            static::addCssClass($options, 'blockquote');
+            if (!isset($contentOptions['class'])) {
+                $contentOptions['class'] = 'mb-0';
+            }
+        }
+        $tag = ArrayHelper::remove($contentOptions, 'tag', 'p');
+        $content = static::tag($tag, $content, $contentOptions);
         if (!Enum::isEmpty($citeContent)) {
             $source = static::tag('cite', $citeSource, ['title' => $citeTitle]);
-            $content .= "\n<small>" . str_replace('{source}', $source, $citeContent) . "</small>";
+            if ($isBs4) {
+                static::addCssClass($footerOptions, 'blockquote-footer');
+                $content .= Html::tag('div', str_replace('{source}', $source, $citeContent), $footerOptions);
+            } else {
+                $content .= "\n<small>" . str_replace('{source}', $source, $citeContent) . "</small>";
+            }
         }
         return static::tag('blockquote', $content, $options);
     }
@@ -842,20 +916,21 @@ class Html extends YiiHtml
     public static function getButtonGroup($type, $name, $selection = null, $items = [], $options = [])
     {
         $class = $type . 'List';
-        static::addCssClass($options, 'btn-group');
+        static::addCssClass($options, ['btn-group', 'btn-group-toggle']);
         $options['data-toggle'] = 'buttons';
         $options['inline'] = true;
+        $widget = new Widget();
         if (!isset($options['itemOptions']['labelOptions']['class'])) {
-            $options['itemOptions']['labelOptions']['class'] = 'btn btn-default';
+            $options['itemOptions']['labelOptions']['class'] = 'btn ' . $widget->getDefaultBtnCss();
         }
         if (!isset($options['item']) || !$options['item'] instanceof Closure) {
-            /** @noinspection PhpUnusedParameterInspection */
             /**
              * @param string $index
              * @param string $label
              * @param string $name
              * @param boolean $checked
              * @param string $value
+             * @return ActiveField
              */
             $options['item'] = function ($index, $label, $name, $checked, $value) use ($type, $options) {
                 $opts = isset($options['itemOptions']) ? $options['itemOptions'] : [];
@@ -1083,16 +1158,28 @@ class Html extends YiiHtml
      * - `badgeOptions`: _array_, the HTML attributes / options for badge container (optional).
      * - `active`: _boolean_, to highlight the item as active (applicable only if $url is passed). Defaults to `false`.
      * - `options`: _array_, HTML attributes / options for the list group item container (optional).
-     * @param string $tag the list item container tag (applied if it is not a link)
+     * @param array $itemOptions HTML attributes for the list group item options (will be overridden by `options` at
+     *   the item level). The following special option is recognized:
+     * - `tag`: _string_, the list group container tag. Defaults to 'div'.
+     * @param array $badgeOptions HTML attributes for the list group item badge options (will be overridden by
+     * `badgeOptions` at the item level)
      *
      * @return string
+     * @throws InvalidConfigException
      */
-    protected static function getListGroupItem($item, $tag)
+    protected static function getListGroupItem($item, $itemOptions = [], $badgeOptions = [])
     {
-        static::addCssClass($item['options'], 'list-group-item');
+        $widget = new Widget();
+        $isBs4 = $widget->isBs4();
         $heading = $body = $badge = $content = $url = $active = '';
-        $options = $headingOptions = $bodyOptions = $badgeOptions = [];
-        extract($item);
+        $itemOptions += ArrayHelper::getValue($item, 'options', []);
+        $badgeOptions += ArrayHelper::getValue($item, 'badgeOptions', []);
+        $url = ArrayHelper::getValue($item, 'url');
+        $badge = ArrayHelper::getValue($item, 'badge', '');
+        $content = ArrayHelper::getValue($item, 'content', '');
+        $active = ArrayHelper::getValue($item, 'active', false);
+        static::addCssClass($itemOptions, 'list-group-item');
+        $hasUrl = !Enum::isEmpty($url);
         if (is_array($content)) {
             extract($content);
             if (!Enum::isEmpty($heading)) {
@@ -1106,15 +1193,23 @@ class Html extends YiiHtml
             $content = $heading . "\n" . $body;
         }
         if (!Enum::isEmpty($badge)) {
-            $content = static::badge($badge, $badgeOptions) . $content;
-        }
-        if (!Enum::isEmpty($url)) {
-            if ($active) {
-                static::addCssClass($options, 'active');
+            if ($isBs4 && empty($badgeOptions['class'])) {
+                $badgeOptions['class'] = 'badge-secondary';
             }
-            return static::a($content, $url, $options);
+            $badge = static::badge($badge, $badgeOptions);
+            $content = $isBs4 ? $content . $badge : $badge . $content;
+        }
+        $tag = ArrayHelper::remove($itemOptions, 'tag', 'div');
+        if ($active) {
+            static::addCssClass($itemOptions, 'active');
+        }
+        if ($hasUrl) {
+            if ($isBs4) {
+                static::addCssClass($itemOptions, 'list-group-item-action');
+            }
+            return static::a($content, $url, $itemOptions);
         } else {
-            return static::tag($tag, $content, $options);
+            return static::tag($tag, $content, $itemOptions);
         }
     }
 
@@ -1137,17 +1232,22 @@ class Html extends YiiHtml
      *
      * @param array $content the panel content settings.
      * @param string $type whether `heading` or `footer`
+     * @param Widget $widget the widget object
      *
      * @return string
+     * @throws InvalidConfigException
      */
-    protected static function getPanelTitle($content, $type)
+    protected static function getPanelTitle($content, $type, $widget)
     {
         $title = ArrayHelper::getValue($content, $type, '');
         if (!Enum::isEmpty($title)) {
             if (ArrayHelper::getValue($content, "{$type}Title", true) === true) {
-                $title = static::tag("h3", $title, ["class" => "panel-title"]);
+                $isBs4 = $widget->isBs4();
+                $tag = $isBs4 ? 'h5' : 'h3';
+                $css = $isBs4 ? 'm-0' : 'panel-title';
+                $title = static::tag($tag, $title, ['class' => $css]);
             }
-            return static::tag("div", $title, ["class" => "panel-{$type}"]) . "\n";
+            return static::tag("div", $title, ["class" => $widget->getCssClass("panel-{$type}")]) . "\n";
         } else {
             return '';
         }

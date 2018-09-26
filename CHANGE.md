@@ -1,15 +1,28 @@
 Change Log: `yii2-helpers`
 ==========================
 
+## Version 1.3.7
+
+**Date:** 26-Sep-2018
+
+- Enhancements to support Bootstrap v4.x.
+- Move all source code to `src` directory.
+- (enh #44): Secure `userIP` function.
+- (enh #43): Update Vietnamese Translations.
+- (enh #42): Update Hungarian Translations.
+- (enh #41): Update German Translations.
+- (enh #40): Fixed `a moment ago` readout.
+- (enh #39): Update Greek Translations.
+
 ## Version 1.3.6
 
 **Date:** 26-Nov-2016
 
-- (enh #33): Update Italian Translations.
-- (enh #35): Add Slovak Translations.
-- (enh #36): Update Russian Translations.
-- (enh #37): Update Finnish Translations.
 - (bug #38): Fix buttonGroup `item` parsing when set as Closure.
+- (enh #37): Update Finnish Translations.
+- (enh #36): Update Russian Translations.
+- (enh #35): Add Slovak Translations.
+- (enh #33): Update Italian Translations.
 - Update message config to include all default standard translation files.
 - Add github contribution and issue/PR logging templates.
 - Add branch alias for dev-master latest release.
@@ -19,9 +32,9 @@ Change Log: `yii2-helpers`
 
 **Date:** 12-Dec-2015
 
-- (enh #27): Add Ukranian Translations.
-- (enh #28): Add Italian Translations.
 - (enh #29): Code style and formatting enhancements.
+- (enh #28): Add Italian Translations.
+- (enh #27): Add Ukranian Translations.
 
 ## Version 1.3.3
 
@@ -44,23 +57,23 @@ Change Log: `yii2-helpers`
 
 **Date:** 15-Jun-2015
 
-- (enh #15): Initialize i18N for getBrowser method.
-- (enh #16): Add Russian translation messages.
-- (enh #17, #18): Update Russian translation messages.
-- (enh #19): Add Portuguese Brazilian translation messages.
-- (bug #21): Remove duplicate browsers in list.
 - (enh #22): Add Spanish translations.
+- (bug #21): Remove duplicate browsers in list.
+- (enh #19): Add Portuguese Brazilian translation messages.
+- (enh #17, #18): Update Russian translation messages.
+- (enh #16): Add Russian translation messages.
+- (enh #15): Initialize i18N for getBrowser method.
 
 ## Version 1.3.0
 
 **Date:** 23-Jan-2015
 
-- (enh #7): Implement translations.
-- (enh #8): Convert days, months, ones, tens, triplets to static methods
-- (enh #9): Add/Enhance new methods for `dayList`, `monthList` and `dateList`.
-- (enh #10): Enhance `timeList` method to include ranges and intervals.
-- (enh #11): Add French Translations and fix `genCalList`.
 - (enh #12): Completed French Translations.
+- (enh #11): Add French Translations and fix `genCalList`.
+- (enh #10): Enhance `timeList` method to include ranges and intervals.
+- (enh #9): Add/Enhance new methods for `dayList`, `monthList` and `dateList`.
+- (enh #8): Convert days, months, ones, tens, triplets to static methods
+- (enh #7): Implement translations.
 
 ## Version 1.2.0
 

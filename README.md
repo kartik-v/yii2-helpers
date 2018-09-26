@@ -1,7 +1,8 @@
 yii2-helpers
 ============
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/kartik-v/yii2-helpers.svg)](https://packagist.org/packages/kartik-v/yii2-helpers)
+[![Latest Stable Version](https://poser.pugx.org/kartik-v/yii2-helpers/v/stable)](https://packagist.org/packages/kartik-v/yii2-helpers)
+[![Latest Unstable Version](https://poser.pugx.org/kartik-v/yii2-helpers/v/unstable)](https://packagist.org/packages/kartik-v/yii2-helpers)
 [![License](https://poser.pugx.org/kartik-v/yii2-helpers/license)](https://packagist.org/packages/kartik-v/yii2-helpers)
 [![Total Downloads](https://poser.pugx.org/kartik-v/yii2-helpers/downloads)](https://packagist.org/packages/kartik-v/yii2-helpers)
 [![Monthly Downloads](https://poser.pugx.org/kartik-v/yii2-helpers/d/monthly)](https://packagist.org/packages/kartik-v/yii2-helpers)
@@ -12,7 +13,7 @@ This extension is a collection of useful helper functions for Yii Framework 2.0.
 ### Html Class
 [```VIEW DEMO```](http://demos.krajee.com/helper-functions/html)  
 
-This class extends the [Yii Html Helper](https://github.com/yiisoft/yii2/blob/master/framework/helpers/Html.php) to incorporate additional HTML markup functionality and features available in [Bootstrap 3.0](http://getbootstrap.com/). The helper functions available in this class are:
+This class extends the [Yii Html Helper](https://github.com/yiisoft/yii2/blob/master/framework/helpers/Html.php) to incorporate additional HTML markup functionality and features available in [Bootstrap 3.x / 4.x](http://getbootstrap.com/). The helper functions available in this class are:
 - Icon
 - Label
 - Badge
@@ -92,4 +93,4 @@ echo Enum::properize('Chris');
 
 ## License
 
-**yii2-helpers** is released under the BSD 3-Clause License. See the bundled `LICENSE.md` for details.
+**yii2-helpers** is released under the BSD-3-Clause License. See the bundled `LICENSE.md` for details.

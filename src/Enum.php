@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2013 - 2016
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2013 - 2018
  * @package yii2-helpers
- * @version 1.3.6
+ * @version 1.3.7
  */
 
 namespace kartik\helpers;
@@ -34,7 +34,7 @@ class Enum extends Inflector
         'day' => 86400,
         'hour' => 3600,
         'minute' => 60,
-        'second' => 1
+        'second' => 1,
     ];
 
     /**
@@ -69,7 +69,7 @@ class Enum extends Inflector
      * ~~~
      *
      * @param string $needle the value to search
-     * @param array  $haystack the array to scan
+     * @param array $haystack the array to scan
      *
      * @return boolean
      */
@@ -109,7 +109,7 @@ class Enum extends Inflector
      * ~~~
      *
      * @param string $fromTime start date time
-     * @param boolean   $human if true returns an approximate human friendly output. If set to `false`, will attempt an
+     * @param boolean $human if true returns an approximate human friendly output. If set to `false`, will attempt an
      *     exact conversion of time intervals.
      * @param string $toTime end date time (defaults to current system time)
      * @param string $append the string to append for the converted elapsed time. Defaults to ' ago'.
@@ -144,7 +144,7 @@ class Enum extends Inflector
         Yii::$app->i18n->translations['kvenum*'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'basePath' => "@kvenum/messages",
-            'forceTranslation' => true
+            'forceTranslation' => true,
         ];
     }
 
@@ -160,7 +160,7 @@ class Enum extends Inflector
      * ~~~
      *
      * @param integer $interval time interval in seconds
-     * @param string  $append the string to append for the converted elapsed time. Defaults to `' ago'`.
+     * @param string $append the string to append for the converted elapsed time. Defaults to `' ago'`.
      * @param boolean $human if true returns an approximate human friendly output. If set to `false`, will attempt an
      * exact conversion of time intervals.
      *
@@ -179,7 +179,7 @@ class Enum extends Inflector
             if ($interval <= 0) {
                 $elapsed = Yii::t('kvenum', 'a moment');
             } elseif ($interval < 60) {
-                $elapsed = Yii::t('kvenum', '{n, plural, one{one second} other{# seconds}}', [ 'n' => $interval]);
+                $elapsed = Yii::t('kvenum', '{n, plural, one{one second} other{# seconds}}', ['n' => $interval]);
             } elseif ($interval >= 60 && $interval < $intervals['hour']) {
                 $interval = floor($interval / $intervals['minute']);
                 $elapsed = Yii::t('kvenum', '{n, plural, one{one minute} other{# minutes}}', ['n' => $interval]);
@@ -211,7 +211,7 @@ class Enum extends Inflector
      * Example Output:
      *    1 year 5 months 3 days ago
      *
-     * @param integer   $time elapsed number of seconds
+     * @param integer $time elapsed number of seconds
      * @param array $intervals configuration of time intervals in seconds
      *
      * @return string
@@ -240,7 +240,7 @@ class Enum extends Inflector
      * echo Enum::formatBytes(17328347842.25, 3); // returns: 16.138 GB
      * ~~~
      *
-     * @param double  $bytes number of bytes
+     * @param double $bytes number of bytes
      * @param integer $precision the number of decimal places to round off
      *
      * @return string
@@ -359,7 +359,7 @@ class Enum extends Inflector
             ' ' . Yii::t('kvenum', 'sixteen'),
             ' ' . Yii::t('kvenum', 'seventeen'),
             ' ' . Yii::t('kvenum', 'eighteen'),
-            ' ' . Yii::t('kvenum', 'nineteen')
+            ' ' . Yii::t('kvenum', 'nineteen'),
         ];
     }
 
@@ -391,7 +391,7 @@ class Enum extends Inflector
             ' ' . Yii::t('kvenum', 'sixty'),
             ' ' . Yii::t('kvenum', 'seventy'),
             ' ' . Yii::t('kvenum', 'eighty'),
-            ' ' . Yii::t('kvenum', 'ninety')
+            ' ' . Yii::t('kvenum', 'ninety'),
         ];
     }
 
@@ -451,7 +451,7 @@ class Enum extends Inflector
             Yii::t('kvenum', 'Wednesday'),
             Yii::t('kvenum', 'Thursday'),
             Yii::t('kvenum', 'Friday'),
-            Yii::t('kvenum', 'Saturday')
+            Yii::t('kvenum', 'Saturday'),
         ];
     }
 
@@ -527,8 +527,8 @@ class Enum extends Inflector
      * Generate a month or day array list for Gregorian calendar
      *
      * @param string $unit whether 'day' or 'month'
-     * @param boolean   $abbr whether to return abbreviated day or month
-     * @param integer    $start the first day or month to set. Defaults to `1`.
+     * @param boolean $abbr whether to return abbreviated day or month
+     * @param integer $start the first day or month to set. Defaults to `1`.
      * @param string $case whether 'upper', lower', or null. If null, then the initcap case will be used.
      *
      * @return array list of days or months
@@ -572,8 +572,8 @@ class Enum extends Inflector
      * print_r(Enum::monthList(true, 4, 'upper'));
      * ~~~
      *
-     * @param boolean   $abbr whether to return abbreviated month
-     * @param integer    $start the first month to set. Defaults to `1` for `January`.
+     * @param boolean $abbr whether to return abbreviated month
+     * @param integer $start the first month to set. Defaults to `1` for `January`.
      * @param string $case whether 'upper', lower', or null. If null, then the initcap case will be used.
      *
      * @return array list of months
@@ -586,8 +586,8 @@ class Enum extends Inflector
     /**
      * Generate a day array list for Gregorian calendar
      *
-     * @param boolean   $abbr whether to return abbreviated day
-     * @param integer    $start the first day to set. Defaults to `1` for `Sunday`.
+     * @param boolean $abbr whether to return abbreviated day
+     * @param integer $start the first day to set. Defaults to `1` for `Sunday`.
      * @param string $case whether 'upper', lower', or null. If null, then the initcap case will be used.
      *
      * @return array list of days
@@ -607,9 +607,9 @@ class Enum extends Inflector
      * print_r(Enum::dateList(1, 10));
      * ~~~
      *
-     * @param integer  $from the start day, defaults to 1
-     * @param integer  $to the end day, defaults to 31
-     * @param integer  $interval the date interval, defaults to 1.
+     * @param integer $from the start day, defaults to 1
+     * @param integer $to the end day, defaults to 31
+     * @param integer $interval the date interval, defaults to 1.
      * @param boolean $intervalFromZero whether to start incrementing intervals from zero if $from = 1.
      * @param boolean $showLast whether to show the last date (set in $to) even if it does not match interval.
      *
@@ -651,11 +651,11 @@ class Enum extends Inflector
      * echo implode(', ', Enum::timeList('sec', 5));
      * ~~~
      *
-     * @param string  $unit the time unit ('hour', 'min', 'sec', 'ms')
+     * @param string $unit the time unit ('hour', 'min', 'sec', 'ms')
      * @param integer $interval the time interval.
      * @param integer $from the time from (defaults to 23 for hour
      * @param integer $to the time to (defaults to 1).
-     * @param boolean    $padZero whether to pad zeros to the left of each time unit value.
+     * @param boolean $padZero whether to pad zeros to the left of each time unit value.
      *
      * @return array
      * @throws InvalidConfigException if $unit passed is invalid
@@ -734,7 +734,7 @@ class Enum extends Inflector
      * echo Enum::array2table($data);
      * ~~~
      *
-     * @param array  $array the associative array to be converted
+     * @param array $array the associative array to be converted
      * @param boolean $transpose whether to show keys as rows instead of columns. This parameter should be used only
      * for a single dimensional associative array. If used for a multidimensional array, the sub array will be imploded
      * as text.
@@ -787,7 +787,7 @@ class Enum extends Inflector
         }
 
         if (!isset($array[0]) || !is_array($array[0])) {
-            $array = array($array);
+            $array = [$array];
         }
         // Take the keys from the first row as the headings
         foreach (array_keys($array[0]) as $heading) {
@@ -894,32 +894,14 @@ class Enum extends Inflector
      */
     public static function userIP($filterLocal = true)
     {
-        $ipSources = [
-            'HTTP_CLIENT_IP',
-            'HTTP_X_FORWARDED_FOR',
-            'HTTP_X_FORWARDED',
-            'HTTP_X_CLUSTER_CLIENT_IP',
-            'HTTP_FORWARDED_FOR',
-            'HTTP_FORWARDED',
-            'REMOTE_ADDR'
-        ];
-        foreach ($ipSources as $key) {
-            if (array_key_exists($key, $_SERVER) === true) {
-                foreach (array_map('trim', explode(',', $_SERVER[$key])) as $ip) {
-                    if ($filterLocal) {
-                        $checkFilter = filter_var(
-                            $ip,
-                            FILTER_VALIDATE_IP,
-                            FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-                        );
-                        if ($checkFilter !== false) {
-                            return $ip;
-                        }
-                    } else {
-                        return $ip;
-                    }
-                }
+        $ip = Yii::$app->request->getUserIP();
+        if ($filterLocal) {
+            $checkFilter = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE);
+            if ($checkFilter !== false) {
+                return $ip;
             }
+        } else {
+            return $ip;
         }
         return 'Unknown';
     }
@@ -934,8 +916,8 @@ class Enum extends Inflector
      * ~~~
      *
      * @param boolean $common show common browsers only
-     * @param array   $browsers the list of browsers
-     * @param string  $agent user agent
+     * @param array $browsers the list of browsers
+     * @param string $agent user agent
      *
      * @return array the browser information
      */
@@ -988,7 +970,7 @@ class Enum extends Inflector
             'code' => 'other',
             'name' => Yii::t('kvenum', 'Other'),
             'version' => "?",
-            'platform' => Yii::t('kvenum', 'Unknown')
+            'platform' => Yii::t('kvenum', 'Unknown'),
         ];
         $ios = Yii::t('kvenum', 'iOS');
         $unix = Yii::t('kvenum', 'Unix');

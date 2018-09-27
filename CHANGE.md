@@ -1,6 +1,12 @@
 Change Log: `yii2-helpers`
 ==========================
 
+## Version 1.3.8
+
+**Date:** 27-Sep-2018
+
+- Bump up version.
+
 ## Version 1.3.7
 
 **Date:** 26-Sep-2018

@@ -1,6 +1,12 @@
 Change Log: `yii2-helpers`
 ==========================
 
+## Version 1.3.9
+
+**Date:** 03-Oct-2018
+
+- Enhance `Html::media` and `Html::mediaList` for Bootstrap 4.x.
+
 ## Version 1.3.8
 
 **Date:** 27-Sep-2018

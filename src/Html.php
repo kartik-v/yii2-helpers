@@ -3,7 +3,7 @@
 /**
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2013 - 2018
  * @package yii2-helpers
- * @version 1.3.8
+ * @version 1.3.9
  */
 
 namespace kartik\helpers;
@@ -552,6 +552,7 @@ class Html extends YiiHtml
      * @param string $tag the media container tag. Defaults to 'div'.
      *
      * @return string
+     * @throws InvalidConfigException
      */
     public static function media(
         $heading = '',
@@ -566,14 +567,17 @@ class Html extends YiiHtml
         $tag = 'div'
     ) {
         static::addCssClass($options, 'media');
-        if (!isset($srcOptions['class'])) {
-            static::addCssClass($srcOptions, 'pull-left');
+        $widget = new Widget();
+        $isBs4 = $widget->isBs4();
+        if (!isset($srcOptions['class']) && !$isBs4) {
+            $srcOptions['class'] = 'pull-left';
         }
         static::addCssClass($imgOptions, 'media-object');
         static::addCssClass($headingOptions, 'media-heading');
         static::addCssClass($bodyOptions, 'media-body');
         $source = static::a(static::img($img, $imgOptions), $src, $srcOptions);
-        $heading = !Enum::isEmpty($heading) ? static::tag('h4', $heading, $headingOptions) : '';
+        $headingTag = ArrayHelper::remove($headingOptions, 'tag', $isBs4 ? 'h5' : 'h4');
+        $heading = !Enum::isEmpty($heading) ? static::tag($headingTag, $heading, $headingOptions) : '';
         $content = !Enum::isEmpty($body) ? static::tag('div', $heading . "\n" . $body, $bodyOptions) : $heading;
         return static::tag($tag, $source . "\n" . $content, $options);
     }
@@ -624,7 +628,7 @@ class Html extends YiiHtml
      *
      * @see http://getbootstrap.com/components/#media
      *
-     * @param array $items the configuration of media items. The following properties can be set as array keys:
+     * @param array $items the configuration of media items. Each item is an array consisting of following array keys:
      *  - `items`: _array_, the sub media items (similar in configuration to items) (optional)
      *  - `heading`: _string_, the media heading
      *  - `body`: _string_, the media content
@@ -635,15 +639,91 @@ class Html extends YiiHtml
      *  - `headingOptions`: _array_, HTML attributes / options for the media heading (optional)
      *  - `bodyOptions`: _array_, HTML attributes / options for the media body (optional)
      *  - `options`: _array_, HTML attributes / options for each media item (optional)
-     * @param array $options HTML attributes / options for the media list container
+     * @param array $options HTML attributes / options for the media list object container.
      *
      * @return string
+     * @throws InvalidConfigException
      */
     public static function mediaList($items = [], $options = [])
     {
         static::addCssClass($options, 'media-list');
         $content = static::getMediaList($items);
-        return static::tag('ul', $content, $options);
+        $tag = ArrayHelper::remove($options, 'tag', 'div');
+        return static::tag($tag, $content, $options);
+    }
+
+    /**
+     * Processes media items array to generate a recursive list.
+     *
+     * @param array $items the media items
+     * @param array $srcOptions html options for the media article link.
+     * @param array $imgOptions html options for the media image.
+     * @param array $headingOptions HTML attributes / options for the media item heading container.
+     * @param array $bodyOptions HTML attributes / options for the media item body container.
+     * @param array $itemOptions HTML attributes / options for the media item container.
+     *
+     * @return string
+     * @throws InvalidConfigException
+     */
+    protected static function getMediaList(
+        $items,
+        $srcOptions = [],
+        $imgOptions = [],
+        $headingOptions = [],
+        $bodyOptions = [],
+        $itemOptions = []
+    ) {
+        $content = '';
+        foreach ($items as $item) {
+            $srcOpts = ArrayHelper::getValue($item, 'srcOptions', $srcOptions);
+            $imgOpts = ArrayHelper::getValue($item, 'imgOptions', $imgOptions);
+            $headOpts = ArrayHelper::getValue($item, 'headingOptions', $headingOptions);
+            $bodyOpts = ArrayHelper::getValue($item, 'bodyOptions', $bodyOptions);
+            $opts = ArrayHelper::getValue($item, 'options', $itemOptions);
+            if (isset($item['items'])) {
+                $item['body'] .= static::getMediaList($item['items'], $srcOpts, $imgOpts, $headOpts, $bodyOpts, $opts);
+            }
+            $tag = ArrayHelper::remove($options, 'tag', 'div');
+            $content .= static::getMediaItem($item, $srcOpts, $imgOpts, $headOpts, $bodyOpts, $opts, $tag) . "\n";
+        }
+        return $content;
+    }
+
+    /**
+     * Processes and generates each media item
+     *
+     * @param array $item the media item configuration
+     * @param array $srcOptions html options for the media article link.
+     * @param array $imgOptions html options for the media image.
+     * @param array $headingOptions HTML attributes / options for the media item heading container.
+     * @param array $bodyOptions HTML attributes / options for the media item body container.
+     * @param array $itemOptions HTML attributes / options for the media item container.
+     * @param string $tag the media item container tag
+     *
+     * @return string
+     * @throws InvalidConfigException
+     */
+    protected static function getMediaItem(
+        $item = [],
+        $srcOptions = [],
+        $imgOptions = [],
+        $headingOptions = [],
+        $bodyOptions = [],
+        $itemOptions = [],
+        $tag = 'div'
+    ) {
+        return static::media(
+            ArrayHelper::getValue($item, 'heading', ''),
+            ArrayHelper::getValue($item, 'body', ''),
+            ArrayHelper::getValue($item, 'src', '#'),
+            ArrayHelper::getValue($item, 'img', ''),
+            ArrayHelper::getValue($item, 'srcOptions', $srcOptions),
+            ArrayHelper::getValue($item, 'imgOptions', $imgOptions),
+            ArrayHelper::getValue($item, 'headingOptions', $headingOptions),
+            ArrayHelper::getValue($item, 'bodyOptions', $bodyOptions),
+            ArrayHelper::getValue($item, 'options', $itemOptions),
+            $tag
+        );
     }
 
     /**
@@ -1251,54 +1331,5 @@ class Html extends YiiHtml
         } else {
             return '';
         }
-    }
-
-    /**
-     * Processes media items array to generate a recursive list.
-     *
-     * @param array $items the media items
-     * @param boolean $top whether item is the topmost parent
-     *
-     * @return string
-     */
-    protected static function getMediaList($items, $top = true)
-    {
-        $content = '';
-        foreach ($items as $item) {
-            $tag = $top ? 'li' : 'div';
-            if (isset($item['items'])) {
-                $item['body'] .= static::getMediaList($item['items'], false);
-            }
-            $content .= static::getMediaItem($item, $tag) . "\n";
-        }
-        return $content;
-    }
-
-    /**
-     * Processes and generates each media item
-     *
-     * @param array $item the media item configuration
-     * @param string $tag the media item container tag
-     *
-     * @return string
-     */
-    protected static function getMediaItem($item = [], $tag = 'div')
-    {
-        $heading = $body = $img = '';
-        $src = '#';
-        $srcOptions = $imgOptions = $options = $headingOptions = $bodyOptions = [];
-        extract($item);
-        return static::media(
-            $heading,
-            $body,
-            $src,
-            $img,
-            $srcOptions,
-            $imgOptions,
-            $headingOptions,
-            $bodyOptions,
-            $options,
-            $tag
-        );
     }
 }

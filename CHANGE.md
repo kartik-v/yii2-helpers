@@ -3,8 +3,9 @@ Change Log: `yii2-helpers`
 
 ## Version 1.3.9
 
-**Date:** 03-Oct-2018
+**Date:** 09-Oct-2018
 
+- Remove composer yii2 bootstrap dependency and correct yii2-krajee-base dependency.
 - Enhance `Html::media` and `Html::mediaList` for Bootstrap 4.x.
 
 ## Version 1.3.8

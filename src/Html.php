@@ -128,7 +128,11 @@ class Html extends YiiHtml
         if (!isset($options['class'])) {
             return false;
         }
-        $classes = preg_split('/\s+/', $options['class'], -1, PREG_SPLIT_NO_EMPTY);
+        if(is_array($options['class'])){
+            $classes = $options['class'];
+        } else {
+            $classes = preg_split('/\s+/', $options['class'], -1, PREG_SPLIT_NO_EMPTY);
+        }
         return in_array($cssClass, $classes);
     }
 

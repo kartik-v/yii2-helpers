@@ -296,8 +296,8 @@ class Enum extends Inflector
     {
         // chunk the number ...xyz
         $x = (int)($num / 1000);
-        $y = ($num / 100) % 10;
-        $z = $num % 100;
+        $y = (int)($num / 100) % 10;
+        $z = (int)$num % 100;
 
         // init the output string
         $str = "";
